@@ -9,7 +9,7 @@ use Application\Entities\City\CityModel;
 class CityTest extends TestCase {
 
 
-	protected $city = NULL; //Application\Entities\City\CityModel
+	protected $city = NULL; // \Application\Entities\City\CityModel
 
 
 	protected function setUp() : void {

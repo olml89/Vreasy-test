@@ -144,7 +144,7 @@ final class RequestValidator {
 
 	private function assertAccept(SymfonyHeaderBag $headers) : void {
 
-		$accept = $headers->get('accept'); //browser always fills with predefined */* if not specified
+		$accept = $headers->get('accept') ?? ''; //browser always fills with predefined */* if not specified
 		$types = explode(',', $accept);
 
 		//default MIME type: requester accepts anything, so escape 
@@ -184,19 +184,21 @@ final class RequestValidator {
 	}
 
 
-	private function validateHeaders(SymfonyRequest $request) : void {
-		$this->assertAcceptCharset($request->headers);
-		$this->assertContentType($request->headers, $request->getMethod());
-		$this->assertAccept($request->headers);
+	//can be called from the outside, for endpoints which doesn't require input (for example, /api/cities/[i:id])
+	public function validateHeaders(SymfonyRequest $request) : void {
+
+		if(!$this->validHeaders) {
+			$this->assertAcceptCharset($request->headers);
+			$this->assertContentType($request->headers, $request->getMethod());
+			$this->assertAccept($request->headers);
+		}
+
 		$this->validHeaders = TRUE;
+
 	}
 
 
 	private function getValidJsonInputFields(SymfonyRequest $request, array $fields) : ?array {
-
-		if(!$this->validHeaders) {
-			$this->validateHeaders($request);
-		}
 
 		//$input = json_decode(file_get_contents('php://input'), TRUE);
 		$input = json_decode($request->getContent(), TRUE);
@@ -244,6 +246,10 @@ final class RequestValidator {
 	//validation fails if only one of the fields is missing or with a wrong type
 	public function assertStrictJsonInput(SymfonyRequest $request, array $expectedFields) : array {
 
+		//validate the headers if needed
+		$this->validateHeaders($request);
+
+		//process the input
 		$processedInput = $this->getValidJsonInputFields($request, $expectedFields);
 
 		if(is_null($processedInput)) {
@@ -270,6 +276,10 @@ final class RequestValidator {
 	//validation passes if no errors are present, no matter if some/all parameters are missing
 	public function assertFlexibleJsonInput(SymfonyRequest $request, array $expectedFields) : array {
 
+		//validate the headers if needed
+		$this->validateHeaders($request);
+
+		//process the input
 		$processedInput = $this->getValidJsonInputFields($request, $expectedFields);
 
 		if(is_null($processedInput)) {
@@ -289,10 +299,10 @@ final class RequestValidator {
 	//simply ignores them. Only raises an error if incorrect content-type (when needed)
 	public function assertFlexibleFormInput(SymfonyRequest $request, array $expectedFields) : array {
 
-		if(!$this->validHeaders) {
-			$this->validateHeaders($request);
-		}
+		//validate the headers if needed
+		$this->validateHeaders($request);
 
+		//process the input
 		$input = $request->request->all(); //$_POST object
 
 		if(empty($input)) {
@@ -321,10 +331,10 @@ final class RequestValidator {
 	//simply ignores them. Only raises an error if incorrect content-type (when needed)
 	public function assertFlexibleQueryParameters(SymfonyRequest $request, array $expectedParameters) : array {
 
-		if(!$this->validHeaders) {
-			$this->validateHeaders($request);
-		}
+		//validate the headers if needed
+		$this->validateHeaders($request);
 
+		//process the input
 		$input = $request->query->all(); //$_GET
 
 		if(empty($input)) {

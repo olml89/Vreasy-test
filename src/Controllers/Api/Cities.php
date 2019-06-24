@@ -80,6 +80,9 @@ final class Cities extends AbstractRestController {
 	// GET /api/cities/[i:id](?date=[a:date]&timezone=[a:timezone])
 	public function getCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse {
 
+		//validate the headers, since there is not input filtering which performs an implicit header validation
+		$this->requestValidator->validateHeaders();
+
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
 
@@ -106,6 +109,9 @@ final class Cities extends AbstractRestController {
 
 	// GET /api/cities/[i:id]/sunrise-sunset(?date=[a:date]&timezone=[a:timezone])
 	public function getSunriseSunset(SymfonyRequest $request, int $cityId) : SymfonyJsonResponse {
+
+		//validate the headers, since there is not input filtering which performs an implicit header validation
+		$this->requestValidator->validateHeaders();
 
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($cityId);
@@ -203,6 +209,9 @@ final class Cities extends AbstractRestController {
 	// PUT /api/cities/[i:id] {name, latitude, longitude}
 	public function editCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse {
 
+		//validate the headers, since there is not input filtering which performs an implicit header validation
+		$this->requestValidator->validateHeaders();
+
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
 
@@ -243,6 +252,9 @@ final class Cities extends AbstractRestController {
 
 	// PATCH /api/cities/[i:id] {name/latitude/longitude}
 	public function updateCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse { 
+
+		//validate the headers, since there is not input filtering which performs an implicit header validation
+		$this->requestValidator->validateHeaders();
 
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
@@ -294,6 +306,9 @@ final class Cities extends AbstractRestController {
 	// DELETE /api/cities/[i:id]
 	public function deleteCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse { 
 
+		//validate the headers, since there is not input filtering which performs an implicit header validation
+		$this->requestValidator->validateHeaders();
+		
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
 
