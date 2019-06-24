@@ -1,3 +1,5 @@
+https://travis-ci.org/olml89/Vreasy-test.svg?branch=master
+
 # Vreasy-test
 Implementation of a test for Vreasy using a light custom PHP Framework.
 
