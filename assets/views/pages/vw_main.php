@@ -10,7 +10,7 @@
 
 	<p>
 		This application is a proof of concept for 
-		<a href="https://web.vreasy.com/">Vreasy</a> 
+		<a href="https://web.vreasy.com">Vreasy</a> 
 		that allows to retrieve the 
 		sunrise/sunset time for cities of the United States using the 
 		<a href="http://sunrise-sunset.org/api">Sunrise-Sunset API</a>. 
@@ -114,7 +114,7 @@
 					<ul>
 						<li>
 							A customized, <strong>built-in from scratch</strong> PHP framework based on 
-							<a href="https://www.php.net/">PHP</a> 7.2.1
+							<a href="https://www.php.net">PHP</a> 7.2.1
 						</li>
 					</ul>
 
@@ -128,16 +128,16 @@
 							<a href="https://github.com/Seldaek/monolog">Monolog</a> 1.24.0 (logging)
 						</li>
 						<li>
-							<a href="https://filp.github.io/whoops/">Whoops</a> 2.3.2 (error handling)
+							<a href="https://filp.github.io/whoops">Whoops</a> 2.3.2 (error handling)
 						</li>
 						<li>
-							<a href="http://php-di.org/">php-di</a> 6.0.8 (DI container)
+							<a href="http://php-di.org">php-di</a> 6.0.8 (DI container)
 						</li>
 						<li>
-							<a href="http://altorouter.com/">Altorouter</a> 1.2.0 (routing)
+							<a href="http://altorouter.com">Altorouter</a> 1.2.0 (routing)
 						</li>
 						<li>
-							<a href="http://docs.guzzlephp.org/en/stable/">Guzzle</a> 6.3.3 (HTTP client)
+							<a href="http://docs.guzzlephp.org/en/stable">Guzzle</a> 6.3.3 (HTTP client)
 						</li>
 						<li>
 							<a href="https://symfony.com/doc/current/components/http_foundation.html">Symfony HttpFoundation</a> 
@@ -158,24 +158,24 @@
             		<p>Javascript libraries:</p>
 					<ul>
 						<li>
-							<a href="https://jquery.com/">jQuery</a> 3.4.1, 
-							<a href="https://jqueryui.com/easing/">jQuery UI easing</a> 1.4.1
+							<a href="https://jquery.com">jQuery</a> 3.4.1, 
+							<a href="https://jqueryui.com/easing">jQuery UI easing</a> 1.4.1
 						</li>
 						<li>
-							<a href="https://mariadb.org/">moment.js</a> 2.24.0
+							<a href="https://momentjs.com">moment.js</a> 2.24.0
 						</li>
 					</ul>
 
 					<p>CSS/JS libraries and components:</p>
 					<ul>
 						<li>
-							<a href="https://getbootstrap.com/">Bootstrap</a> 4.3.1
+							<a href="https://getbootstrap.com">Bootstrap</a> 4.3.1
 						</li>
 						<li>
-							<a href="https://prismjs.com/">PrismJS</a> 1.16.0
+							<a href="https://prismjs.com">PrismJS</a> 1.16.0
 						</li>
 						<li>
-							<a href="http://www.daterangepicker.com/">Date Range Picker</a> 3.0.5
+							<a href="http://www.daterangepicker.com">Date Range Picker</a> 3.0.5
 						</li>
 					</ul>
             	</div>
@@ -190,10 +190,10 @@
             	<div class="card-body">
 					<ul>
 						<li>
-							<a href="https://httpd.apache.org/">HTTP Apache server</a> 2.4.29
+							<a href="https://httpd.apache.org">HTTP Apache server</a> 2.4.29
 						</li>
 						<li>
-							<a href="https://mariadb.org/">MariaDB</a> 10.1.30
+							<a href="https://mariadb.org">MariaDB</a> 10.1.30
 						</li>
 					</ul>
             	</div>
@@ -208,16 +208,19 @@
             	<div class="card-body">
             		<ul>
 						<li>
-							<a href="https://getcomposer.org/">composer</a> 1.8.6
+							<a href="https://getcomposer.org">composer</a> 1.8.6
 						</li>
 						<li>
-							<a href="https://www.phpmyadmin.net/">phpMyAdmin</a> 4.7.4
+							<a href="https://www.phpmyadmin.net">phpMyAdmin</a> 4.7.4
 						</li>
 						<li>
-							<a href="https://phpunit.de/">PHPUnit</a> 8.2.3
+							<a href="https://phpunit.de">PHPUnit</a> 8.2.3
 						</li>
 						<li>
-							<a href="https://www.sourcetreeapp.com/">Sourcetree</a> 2.4.7.0
+							<a href="https://travis-ci.com">Travis CI</a> 8.2.3
+						</li>
+						<li>
+							<a href="https://www.sourcetreeapp.com">Sourcetree</a> 2.4.7.0
 							(Git 2.14.1)
 						</li>
 						<li>
