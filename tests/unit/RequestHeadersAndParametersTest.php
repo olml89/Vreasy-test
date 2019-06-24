@@ -15,10 +15,10 @@ class CityRepositoryTest extends TestCase {
 	protected function setUp() : void {
 
 		$this->client = new \GuzzleHttp\Client([
-            'user_agent'        => 'testing_api',
-            'http_errors'       => FALSE, 
-            'allow_redirects'   => ['track_redirects' => TRUE]
-        ]);
+			'user_agent'        => 'testing_api',
+			'http_errors'       => FALSE, 
+			'allow_redirects'   => ['track_redirects' => TRUE]
+		]);
 
 	}
 
@@ -29,9 +29,9 @@ class CityRepositoryTest extends TestCase {
 		$invalidId = 0;	//invalid
 
 		$headers = [
-			'Accept-Charset' => 'UTF-8',
-			'Accept'		 => 'application/json',
-			'Content-Type'	 => 'application/json'
+			'Accept-Charset' 	=> 'UTF-8',
+			'Accept'			=> 'application/json',
+			'Content-Type'	 	=> 'application/json'
 		];
 
 		$statusCode = $this->client->get($this->baseUrl.'/api/cities/'.$invalidId, ['headers' => $headers])->getStatusCode();
@@ -44,9 +44,9 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertGetCitiesInvalidAcceptCharsetReturns406() : void {
 
 		$headers = [
-			'Accept-Charset' => 'INVALID_CHARSET',	//invalid
-			'Accept'		 => 'application/json',
-			'Content-Type'	 => 'application/json'
+			'Accept-Charset' 	=> 'INVALID_CHARSET',	//invalid
+			'Accept'			=> 'application/json',
+			'Content-Type'	 	=> 'application/json'
 		];
 
 		$statusCode = $this->client->get($this->baseUrl.'/api/cities', ['headers' => $headers])->getStatusCode();
@@ -59,9 +59,9 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertGetCitiesInvalidCharsetImplicitOnAcceptReturns406() : void {
 
 		$headers = [
-			'Accept-Charset' => NULL,
-			'Accept'		 => 'application/json;charset=INVALID',	//invalid
-			'Content-Type'	 => 'application/json'
+			'Accept-Charset' 	=> NULL,
+			'Accept'			=> 'application/json;charset=INVALID',	//invalid
+			'Content-Type'	 	=> 'application/json'
 		];
 
 		$statusCode = $this->client->get($this->baseUrl.'/api/cities', ['headers' => $headers])->getStatusCode();
@@ -74,9 +74,9 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertGetCitiesValidCharsetImplicitOnAcceptReturns200() : void {
 
 		$headers = [
-			'Accept-Charset' => NULL,
-			'Accept'		 => 'application/json;charset=UTF-8',
-			'Content-Type'	 => 'application/json'
+			'Accept-Charset' 	=> NULL,
+			'Accept'			=> 'application/json;charset=UTF-8',
+			'Content-Type'	 	=> 'application/json'
 		];
 
 		$statusCode = $this->client->get($this->baseUrl.'/api/cities', ['headers' => $headers])->getStatusCode();
@@ -89,8 +89,8 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertMissingContentTypeOnEndpointRequiringContentReturns415() : void {
 
 		$city = [
-			'name' => 'Boston',
-			'latitude' => 42.3602534,
+			'name' 		=> 'Boston',
+			'latitude' 	=> 42.3602534,
 			'longitude' => -71.0582912
 		];
 
@@ -110,8 +110,8 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertInvalidContentTypeOnEndpointRequiringContentReturns415() : void {
 
 		$city = [
-			'name' => 'Boston',
-			'latitude' => 42.3602534,
+			'name' 		=> 'Boston',
+			'latitude' 	=> 42.3602534,
 			'longitude' => -71.0582912
 		];
 
@@ -178,8 +178,8 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertCantCreateACityWithoutName() : void {
 
 		$city = [							
-			//'name'  => 'Boston'			//invalid (missing)
-			'latitude' => 42.3602534,
+			//'name'  	=> 'Boston'			//invalid (missing)
+			'latitude' 	=> 42.3602534,
 			'longitude' => -71.0582912
 		];
 
@@ -199,8 +199,8 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertCantCreateACityWithIncorrectParameters() : void {
 
 		$city = [							
-			'name'  => FALSE,			//invalid 
-			'latitude' => 42.3602534,
+			'name'  	=> FALSE,			//invalid 
+			'latitude' 	=> 42.3602534,
 			'longitude' => -71.0582912
 		];
 
@@ -220,8 +220,8 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertCantCreateACityWithSyntacticallyCorrectButInvalidParameters() : void {
 
 		$city = [							
-			'name'  => 'Boston',			
-			'latitude' => 422.3602534,		//invalid (>90)
+			'name'  	=> 'Boston',			
+			'latitude' 	=> 422.3602534,		//invalid (>90)
 			'longitude' => -7123.05912		//invalid (<180)
 		];
 
@@ -241,8 +241,8 @@ class CityRepositoryTest extends TestCase {
 	public function testAssertCantCreateAnExistingCityAndReturns409() : void {
 
 		$city = [						//invalid, as it exists
-			'name' => 'Boston',
-			'latitude' => 42.3602534,
+			'name' 		=> 'Boston',
+			'latitude' 	=> 42.3602534,
 			'longitude' => -71.0582912
 		];
 

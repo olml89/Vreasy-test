@@ -39,16 +39,16 @@
 		<a href="https://github.com/vlucas/phpdotenv">phpdotenv</a> library. 
 		Structured exception handling and logging is implemented throghout all the request lifetime cycle. 
 		The application is 
-		<a href="https://www.php-fig.org/psr/psr-3/">PSR-3</a>, 
-		<a href="https://www.php-fig.org/psr/psr-4/">PSR-4</a> and 
-		<a href="https://www.php-fig.org/psr/psr-11/">PSR-11</a> compliant, but not 
-		<a href="https://www.php-fig.org/psr/psr-7/">PSR-7</a>, 
-		<a href="https://www.php-fig.org/psr/psr-17/">PSR-17</a> or 
-		<a href="https://www.php-fig.org/psr/psr-18/">PSR-18</a> 
+		<a href="https://www.php-fig.org/psr/psr-3">PSR-3</a>, 
+		<a href="https://www.php-fig.org/psr/psr-4">PSR-4</a> and 
+		<a href="https://www.php-fig.org/psr/psr-11">PSR-11</a> compliant, but not 
+		<a href="https://www.php-fig.org/psr/psr-7">PSR-7</a>, 
+		<a href="https://www.php-fig.org/psr/psr-17">PSR-17</a> or 
+		<a href="https://www.php-fig.org/psr/psr-18">PSR-18</a> 
 		as it uses the 
 		<a href="https://symfony.com/doc/current/components/http_foundation.html">Symfony HTTP Foundation</a> component 
 		as the request/response ecosystem and 
-		<a href="http://docs.guzzlephp.org/en/stable/">GuzzleHTTP</a> 
+		<a href="http://docs.guzzlephp.org/en/stable">GuzzleHTTP</a> 
 		as the HTTP client.
 	</p>
 
