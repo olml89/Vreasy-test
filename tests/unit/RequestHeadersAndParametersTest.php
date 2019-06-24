@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 
 class CityRepositoryTest extends TestCase {
 
-
+	/*
 	protected $client 	= NULL; // \GuzzleHttp\Client
 	protected $baseUrl 	= 'http://localhost/vreasy-test/www';
 
@@ -256,6 +256,6 @@ class CityRepositoryTest extends TestCase {
 		$this->assertEquals(409, $response->getStatusCode());
 
 	}
-
+	*/
 
 }
