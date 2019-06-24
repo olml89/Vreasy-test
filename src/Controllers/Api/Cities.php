@@ -81,7 +81,7 @@ final class Cities extends AbstractRestController {
 	public function getCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse {
 
 		//validate the headers, since there is not input filtering which performs an implicit header validation
-		$this->requestValidator->validateHeaders();
+		$this->requestValidator->validateHeaders($request);
 
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
@@ -111,7 +111,7 @@ final class Cities extends AbstractRestController {
 	public function getSunriseSunset(SymfonyRequest $request, int $cityId) : SymfonyJsonResponse {
 
 		//validate the headers, since there is not input filtering which performs an implicit header validation
-		$this->requestValidator->validateHeaders();
+		$this->requestValidator->validateHeaders($request);
 
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($cityId);
@@ -210,7 +210,7 @@ final class Cities extends AbstractRestController {
 	public function editCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse {
 
 		//validate the headers, since there is not input filtering which performs an implicit header validation
-		$this->requestValidator->validateHeaders();
+		$this->requestValidator->validateHeaders($request);
 
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
@@ -254,7 +254,7 @@ final class Cities extends AbstractRestController {
 	public function updateCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse { 
 
 		//validate the headers, since there is not input filtering which performs an implicit header validation
-		$this->requestValidator->validateHeaders();
+		$this->requestValidator->validateHeaders($request);
 
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
@@ -307,8 +307,8 @@ final class Cities extends AbstractRestController {
 	public function deleteCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse { 
 
 		//validate the headers, since there is not input filtering which performs an implicit header validation
-		$this->requestValidator->validateHeaders();
-		
+		$this->requestValidator->validateHeaders($request);
+
 		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
 

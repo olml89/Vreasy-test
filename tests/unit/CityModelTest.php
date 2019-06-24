@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Application\Entities\City\CityModel;
 
 
-class CityTest extends TestCase {
+class CityModelTest extends TestCase {
 
 
 	protected $city = NULL; // \Application\Entities\City\CityModel

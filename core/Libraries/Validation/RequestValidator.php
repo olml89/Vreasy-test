@@ -144,7 +144,8 @@ final class RequestValidator {
 
 	private function assertAccept(SymfonyHeaderBag $headers) : void {
 
-		$accept = $headers->get('accept') ?? ''; //browser always fills with predefined */* if not specified
+		//browser always fills with predefined */* if not specified. We assume if nothing is specified, they will expect anything
+		$accept = $headers->get('accept') ?? '*/*'; 
 		$types = explode(',', $accept);
 
 		//default MIME type: requester accepts anything, so escape 
@@ -202,7 +203,6 @@ final class RequestValidator {
 
 		//$input = json_decode(file_get_contents('php://input'), TRUE);
 		$input = json_decode($request->getContent(), TRUE);
-		$this->errors = [];
 
 		//malformed JSON
 		if(is_null($input)) {
@@ -213,6 +213,9 @@ final class RequestValidator {
 		if(empty($input)) {
 			return [];
 		}
+
+		//initialize the error array
+		$this->errors = [];
 
 		//unexpected fields on the input: return them, they count as errors, request must avoid them
 		$unexpectedFields = array_diff(array_keys($input), array_keys($fields));
@@ -228,8 +231,10 @@ final class RequestValidator {
 		foreach($fields as $field=>$rule) {
 
 			//if it exists: calls the callback rule attempting to convert the value to the correct type first. If it fails or 
-			//if it is missing, marks this as an error
-			if(array_key_exists($field, $input) && $this->rules[$rule]($input[$field], TRUE)) { //call the callback in rules
+			//if it is missing (or null), marks this as an error
+			$exists = array_key_exists($field, $input);
+
+			if($exists && !is_null($input[$field]) && $this->rules[$rule]($input[$field], TRUE)) { //call the callback in rules
 				$output[$field] = $input[$field];
 				continue;
 			}
@@ -315,7 +320,9 @@ final class RequestValidator {
 		foreach($expectedFields as $field=>$rule) {
 
 			//if it exists and is not empty: calls de callback rule attempting to convert the value to the correct type first
-			if(array_key_exists($field, $input) && !empty($input[$field]) && $this->rules[$rule]($input[$field], TRUE)) { 
+			$exists = array_key_exists($field, $input);
+
+			if($exists && !empty($input[$field]) && $this->rules[$rule]($input[$field], TRUE)) { 
 				$output[$field] = $input[$field];
 				continue;
 			}
