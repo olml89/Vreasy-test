@@ -217,7 +217,7 @@
 							<a href="https://phpunit.de">PHPUnit</a> 8.2.3
 						</li>
 						<li>
-							<a href="https://travis-ci.com">Travis CI</a> 8.2.3
+							<a href="https://travis-ci.com">Travis CI</a>
 						</li>
 						<li>
 							<a href="https://www.sourcetreeapp.com">Sourcetree</a> 2.4.7.0
