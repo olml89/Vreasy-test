@@ -112,7 +112,7 @@ final class Application {
 
 
 	public function stop() : void {
-		$container->get('errorHandler')->unregisterHandlers();
+		$this->container->get('errorHandler')->restoreHandlers();
 		exit(self::EXIT_OK);
 	}
 

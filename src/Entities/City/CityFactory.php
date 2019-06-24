@@ -5,6 +5,23 @@ namespace Application\Entities\City;
 final class CityFactory {
 
 
+	public function getInvalidCoordinates(float $latitude, float $longitude) : array {
+
+		$invalidCoordinates = [];
+
+		if($latitude < -90 || $latitude > 90) {
+			$invalidCoordinates['latitude'] = 'must be between -90 and 90';
+		}
+
+		if($longitude < -180 || $longitude > 180) {
+			$invalidCoordinates['longitude'] = 'must be between -180 and 180';
+		}
+
+		return $invalidCoordinates;
+
+	}
+
+
 	public function createFromInput(array $input) : CityModel {
 
 		return new CityModel(

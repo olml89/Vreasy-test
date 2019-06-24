@@ -15,7 +15,7 @@
 		sunrise/sunset time for cities of the United States using the 
 		<a href="http://sunrise-sunset.org/api">Sunrise-Sunset API</a>. 
 		The source code of this application is published on this 
-		<a href="">GitHub repository</a>.
+		<a href="https://github.com/olml89/Vreasy-test">GitHub repository</a>.
 	</p>
 
 	<ol class="table-contents">

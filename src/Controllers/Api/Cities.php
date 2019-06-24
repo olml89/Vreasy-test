@@ -179,6 +179,15 @@ final class Cities extends AbstractRestController {
 			'longitude' => 'float'
 		]);
 
+		//we are assured the input is well-formed and the fields are from the correct type, now we must assure
+		//the values are coherent
+		$invalidCoordinates = $this->cityFactory->getInvalidCoordinates($post['latitude'], $post['longitude']);
+
+		if(!empty($invalidCoordinates)) {
+			throw HttpExceptionFactory::badRequestInvalidValues($invalidCoordinates); 
+		}
+
+		//all is correct, create the city and try to save it
 		$city = $this->cityFactory->createFromInput($post);
 
 		if(!$this->cityRepository->save($city)) {
@@ -194,6 +203,13 @@ final class Cities extends AbstractRestController {
 	// PUT /api/cities/[i:id] {name, latitude, longitude}
 	public function editCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse {
 
+		//get city. Early escape if it doesn't exist
+		$city = $this->cityRepository->getById($id);
+
+		if(empty($city)) {
+			throw HttpExceptionFactory::notFound('City '.$id.' could not be found');
+		}
+
 		//filter input: required name, latitude, longitude
 		$post = $this->requestValidator->assertStrictJsonInput($request, [
 			'name' 		=> 'string',
@@ -201,12 +217,15 @@ final class Cities extends AbstractRestController {
 			'longitude' => 'float'
 		]);
 
-		$city = $this->cityRepository->getById($id);
+		//we are assured the input is well-formed and the fields are from the correct type, now we must assure
+		//the values are coherent
+		$invalidCoordinates = $this->cityFactory->getInvalidCoordinates($post['latitude'], $post['longitude']);
 
-		if(empty($city)) {
-			throw HttpExceptionFactory::notFound('City '.$id.' could not be found');
+		if(!empty($invalidCoordinates)) {
+			throw HttpExceptionFactory::badRequestInvalidValues($invalidCoordinates); 
 		}
 
+		//create a new city from the previous one and change the fields
 		$editedCity = $this->cityFactory->createFromCity($city);
 		$editedCity->setName($post['name']);
 		$editedCity->setLatitude($post['latitude']);
@@ -225,6 +244,13 @@ final class Cities extends AbstractRestController {
 	// PATCH /api/cities/[i:id] {name/latitude/longitude}
 	public function updateCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse { 
 
+		//get city. Early escape if it doesn't exist
+		$city = $this->cityRepository->getById($id);
+
+		if(empty($city)) {
+			throw HttpExceptionFactory::notFound('City '.$id.' could not be found');
+		}
+
 		//filter input: optional name/latitude/longitude
 		$post = $this->requestValidator->assertFlexibleJsonInput($request, [
 			'name' 		=> 'string',
@@ -232,12 +258,15 @@ final class Cities extends AbstractRestController {
 			'longitude' => 'float'
 		]);
 
-		$city = $this->cityRepository->getById($id);
+		//we are assured the input is well-formed and the fields are from the correct type, now we must assure
+		//the values are coherent
+		$invalidCoordinates = $this->cityFactory->getInvalidCoordinates($post['latitude'], $post['longitude']);
 
-		if(empty($city)) {
-			throw HttpExceptionFactory::notFound('City '.$id.' could not be found');
+		if(!empty($invalidCoordinates)) {
+			throw HttpExceptionFactory::badRequestInvalidValues($invalidCoordinates); 
 		}
 
+		//create a new city from the previous one and change the fields if needed
 		$editedCity = $this->cityFactory->createFromCity($city);
 
 		if(array_key_exists('name', $post)) {
@@ -265,12 +294,14 @@ final class Cities extends AbstractRestController {
 	// DELETE /api/cities/[i:id]
 	public function deleteCity(SymfonyRequest $request, int $id) : SymfonyJsonResponse { 
 
+		//get city. Early escape if it doesn't exist
 		$city = $this->cityRepository->getById($id);
 
 		if(empty($city)) {
 			throw HttpExceptionFactory::notFound('City '.$id.' could not be found');
 		}
 
+		//try to delete
 		if(!$this->cityRepository->delete($city)) {
 			throw HttpExceptionFactory::failure('City '.$city->getId().' could not be deleted');
 		}

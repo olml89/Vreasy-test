@@ -139,9 +139,12 @@ $container = $builder->build();
 //load the environment
 $container->get(\Dotenv\Dotenv::class);
 
-//launch
+//launch: process the request, send the response
 $application = new \System\Application($container);
 $application->run(\Symfony\Component\HttpFoundation\Request::createFromGlobals())->send();
+
+//stop (unregister handlers and send exit signal)
+$application->stop();
 
 
 

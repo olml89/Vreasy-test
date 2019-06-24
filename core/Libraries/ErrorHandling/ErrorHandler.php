@@ -121,17 +121,17 @@ final class ErrorHandler {
 
 	public function handleException(\Throwable $exception) : void {
 
-		//meaningful exceptions. mysqli error 1062 = duplicated entry => HTTP 409 Conflict
-		if($exception instanceof \mysqli_sql_exception && $exception->getCode() === 1062) {
-			$exception = HttpExceptionFactory::conflict($exception->getMessage());
-		}
-
 		//always log the exception
 		$this->log->critical($exception->getMessage(), array_merge(
 			$this->getUserContext(),
 			['exception' => $exception]
 		)); 
 
+		//meaningful exceptions. mysqli error 1062 = duplicated entry => HTTP 409 Conflict
+		if($exception instanceof \mysqli_sql_exception && $exception->getCode() === 1062) {
+			$exception = HttpExceptionFactory::conflict($exception->getMessage());
+		}
+		
 		//in production, convert all exceptions into a HTTP exception to display it in a friendly way
 		if(!$this->debug) {
 

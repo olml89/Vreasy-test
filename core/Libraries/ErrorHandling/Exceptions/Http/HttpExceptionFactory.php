@@ -28,7 +28,14 @@ class HttpExceptionFactory {
 
 
 	public static function badRequestInvalidValues(array $invalidValues) : HttpException400 {
+
+		$invalidValues = array_map(function(string $correctValue, string $field) : string {
+				return $field.' '.$correctValue;
+			}, $invalidValues, array_keys($invalidValues)
+		);
+
 		return new HttpException400('Invalid values: '.implode(', ', $invalidValues));
+
 	}
 
 

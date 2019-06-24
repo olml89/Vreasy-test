@@ -5,9 +5,11 @@ namespace System\Libraries\ErrorHandling\Exceptions\Http;
 abstract class AbstractHttpException extends \Exception implements HttpExceptionInterface {
 
 
-	public function __construct(string $message, array $headers = []) { //headers for redirections, locations, authentications...
+	//headers for redirections, locations, authentications...
+	//previous to create a stack trace
+	public function __construct(string $message, array $headers = [], \Throwable $previous = NULL) { 
 
-		parent::__construct($message, $this::CODE);
+		parent::__construct($message, $this::CODE, $previous);
 
 		foreach($headers as $header) {
 			header($header);
