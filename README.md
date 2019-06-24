@@ -27,7 +27,7 @@ DB_HOST, DB_USER and DB_PASSWORD are the credentials to authenticate with your m
 
 ## General overview
 
-The application contains the necessary set of RESTful services implemented by its own REST API. The database connection-related parameters are set as environment variables and loaded using the https://github.com/vlucas/phpdotenv library. Structured exception handling and logging is implemented throghout all the request lifetime cycle. The application is PSR-3, PSR-4 and PSR-11 compliant, but not PSR-7, PSR-17 or PSR-18 as it uses the Symfony HTTP Foundation component as the request/response ecosystem and GuzzleHTTP as the HTTP client. 
+The application contains the necessary set of RESTful services implemented by its own REST API. The database connection-related parameters are set as environment variables and loaded using the [https://github.com/vlucas/phpdotenv] library. Structured exception handling and logging is implemented throghout all the request lifetime cycle. The application is PSR-3, PSR-4 and PSR-11 compliant, but not PSR-7, PSR-17 or PSR-18 as it uses the Symfony HTTP Foundation component as the request/response ecosystem and GuzzleHTTP as the HTTP client. 
 
 
 
