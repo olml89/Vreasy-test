@@ -35,7 +35,7 @@ final class RequestValidator {
 
 	private $rules 			= [];		//validation rules for types
 	private $contentTypes 	= [];		//valid content types (input)
-	private $accept 		= [];		//valid accept types (output)
+	private $responseTypes	= [];		//valid accept types (output)
 
 	private $correctCharset = FALSE;	//checks for charset first in accept-charset, later on in accept
 	private $errors 		= [];		//validation errors
@@ -71,7 +71,7 @@ final class RequestValidator {
 
 
 	public function setAccept(array $acceptTypes) : void {
-		$this->accept = $acceptTypes;
+		$this->responseTypes = $acceptTypes;
 	}
 
 
@@ -86,8 +86,8 @@ final class RequestValidator {
 
 		$charset = strtolower($charset);
 
-		if(!in_array($charset, $this->accept)) {
-			throw HttpExceptionFactory::invalidCharset($charset, $this->accept);
+		if(!in_array($charset, $this->responseTypes)) {
+			throw HttpExceptionFactory::invalidCharset($charset, $this->responseTypes);
 		}
 
 		$this->correctCharset = TRUE;
@@ -148,11 +148,7 @@ final class RequestValidator {
 		$accept = $headers->get('accept') ?? '*/*'; 
 		$types = explode(',', $accept);
 
-		//default MIME type: requester accepts anything, so escape 
-		if(in_array(self::DEFAULT_MIME_TYPE, $types)) {
-			return;
-		}
-
+		//strip the priority and look up for possible implicit charsets
 		foreach($types as &$type) {
 
 			if(strpos($type, ';q=')) {
@@ -171,15 +167,21 @@ final class RequestValidator {
 				$charset = strtolower(str_replace(';', '', $charset));
 
 				if(array_key_exists($type, $this->contentTypes) && $this->contentTypes[$type] !== $charset) {
-					throw HttpExceptionFactory::notAcceptableCharset($type, $charset, $this->accept);
+					throw HttpExceptionFactory::notAcceptableCharset($type, $charset, $this->responseTypes);
 				}
 
 			}
 
 		}
 
-		if(empty(array_intersect($types, array_keys($this->accept)))) {
-			throw HttpExceptionFactory::notAcceptable($accept, array_keys($this->accept));
+		//default MIME type present: requester accepts anything, so escape 
+		if(in_array(self::DEFAULT_MIME_TYPE, $types)) {
+			return;
+		}
+
+		//explicit types requested, mandatory, check for coincidence with our response types
+		if(empty(array_intersect($types, array_keys($this->responseTypes)))) {
+			throw HttpExceptionFactory::notAcceptable($accept, array_keys($this->responseTypes));
 		}
 
 	}
