@@ -14,8 +14,8 @@ composer install
 ```
 The application will automatically bootstrap the database, creating it if not exists and seeding it with some default values, but to be able to do that you will have to provide the database credentials in a .env file located at the root of the project. The file has to have the following values:
 ```json
-ENVIRONMENT=[your_environment]
-DB_HOST=[your_mysql_server_address]
+ENVIRONMENT=(your_environment_of_choice)
+DB_HOST=your_mysql_server_address
 DB_USER=[your_mysql_user]
 DB_PASSWORD=[your_mysql_password]
 DB_NAME="vreasy_test"
