@@ -1,0 +1,70 @@
+@import "variables.scss";
+@import "mixins.scss";
+@import "global.scss";
+@import "utilities.scss";
+@import "navbar.scss";
+@import "cards.scss";
+@import "footer.scss";
+
+@import "pages/pagination.scss";
+
+
+//custom class to hide elements on page loading
+.hidden {	
+	display: none !important;
+}
+
+
+//customize code blocks (using prism library)
+//https://websemantics.uk/articles/displaying-code-in-web-pages/
+figure.code-block {
+
+	position: relative;
+
+	figcaption {
+		position: absolute;
+		top: 0.5rem;
+		left: 2.5rem;
+		font-size: medium;
+		font-style: italic;
+		color: #6c5f7c;
+	}
+
+}
+
+
+//override prism font-type, is ugly
+code, kbd, pre, samp {
+	font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !important; //this is bootstrap's default
+}
+
+
+//lists without bullets
+ul {
+	list-style-type: none;
+}
+
+
+//table of contents
+ol.table-contents {
+	background-color: #f5f5f5;
+	border: 1px solid #e3e3e3;
+	padding: 40px;
+}
+
+
+//spacing things a little bit
+h2 {
+	margin-top: 2rem;
+	margin-bottom: 1.5rem;
+}
+
+h3, h4, h5, h6 {
+	margin-bottom: 1rem;
+}
+
+
+p {
+	margin-bottom: 1.5rem;
+}
+

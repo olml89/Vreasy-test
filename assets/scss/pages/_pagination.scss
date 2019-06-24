@@ -1,0 +1,51 @@
+
+.pagination {
+
+    //overriding fucking bootstrap default styles for .pagination class...
+    //padding-left: 30px;
+    bottom: 0;
+    padding: 0;
+    margin: 20px;
+    border-radius: 0;
+    display: block;
+
+    //centers section title
+    text-align: center;
+
+    .pages-container {
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        //todos los elementos, links o no
+        span.current-page, a {
+            width: 40px;
+            margin: 8px;
+            padding: 8px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        //current page
+        span.current-page {
+            background-color: lighten(#007bff, 10%);
+        }
+
+        //links
+        a {
+
+            background-color: #007bff;
+
+            &:hover {
+                text-decoration: none;
+                background-color: lighten(#007bff, 10%);
+            }
+
+        }
+
+    }
+
+}
+
