@@ -20,14 +20,8 @@ abstract class AbstractWebController extends AbstractBaseController {
 	public function __construct(Configuration $config, TemplaterInterface $templater, ?RequestValidator $requestValidator = NULL) {
 
 		if(!empty($requestValidator)) {
-
-			$requestValidator->setContentType([
-				'application/x-www-form-urlencoded' => 'utf-8', //$_POST urlencoded forms
-				'text/html'							=> 'urf-8'	//$_GET query parameters
-			]);
-
-			$requestValidator->setAccept(['text/html' => 'utf-8']);
-
+			$requestValidator->setRequestContentType(['application/x-www-form-urlencoded' => 'utf-8']);
+			$requestValidator->setResponseAcceptTypes(['text/html' => 'utf-8']);	
 		}
 
 		parent::__construct($requestValidator);

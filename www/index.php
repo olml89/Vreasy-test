@@ -4,6 +4,14 @@
 define('ROOTPATH', dirname(__FILE__, 2));
 define('ENVIRONMENT', 'development');  
 
+//set initial error displaying to show something if the initial application bootstraping fails
+ini_set('xdebug.var_display_max_depth', '-1');
+ini_set('xdebug.var_display_max_children', '-1');
+ini_set('xdebug.var_display_max_data', '-1');
+ini_set('display_errors', 'On');
+ini_set('display_startup_errors', 'On');
+error_reporting(E_ALL);
+
 //load Composer dependencies
 require_once ROOTPATH.'/vendor/autoload.php';
 
@@ -22,9 +30,10 @@ $builder->addDefinitions([
     //enable logging
 	\Psr\Log\LoggerInterface::class => \DI\factory(function(\Psr\Container\ContainerInterface $c) {
 
-		$logPath 	= ROOTPATH.'/data/log.txt';
-		$dateFormat = 'd/m/Y H:i:s';
-		$output 	= '[%datetime%] %channel%.%level_name%: %message% %context% %extra%'.PHP_EOL;
+		$logConfig 	= $c->get(\System\Libraries\Configuration\Configuration::class)->get('logging');
+		$logPath 	= ROOTPATH.'/'.$logConfig['path'] ?? ROOTPATH.'/data/log.txt';
+		$dateFormat = $logConfig['format'] ?? 'd/m/Y H:i:s';
+		$output 	= $logConfig['output'] ?? '[%datetime%] %channel%.%level_name%: %message% %context% %extra%'.PHP_EOL;
 
 		$monolog 	= new \Monolog\Logger('debug');
 		$stream 	= new \Monolog\Handler\StreamHandler($logPath, \Monolog\Logger::DEBUG);
@@ -70,9 +79,6 @@ $builder->addDefinitions([
     //instantiate database access class
     \System\Libraries\Database\DatabaseInterface::class => \DI\factory(function(\Psr\Container\ContainerInterface $c) {
 
-        //DB connection-related parameters
-        //$dotEnv = Dotenv\Dotenv::create(ROOTPATH);
-        //$dotEnv->load();
         //DB connection-related parameters: loaded from the environment
         $dbConfig = [
             'host'      => getenv('DB_HOST') ?? '',

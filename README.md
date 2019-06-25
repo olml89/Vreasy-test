@@ -25,7 +25,10 @@ DB_CHARSET="utf8"
 ```
 The environment string is optional and can take up to three values: 'development', 'testing', 'production'. If the value is invalid or missing, the application will assume a development environment.
 
-DB_HOST, DB_USER and DB_PASSWORD are the credentials to authenticate with your mysql server. The DB_NAME and the DB_CHARSET can be whichever you want, but if you want the application to bootstrap the database for you instead of having to do it manually you must provide the values by default shown here.
+*DB_HOST*, *DB_USER* and *DB_PASSWORD* are the credentials to authenticate with your mysql server. The *DB_NAME* and the *DB_CHARSET* can be whichever you want, but if you want the application to bootstrap the database for you instead of having to do it manually you must provide the values by default shown here.
+
+## Logging configuration
+In the **/config** application directory, a logging.php configuration file can be found to set up the logging environment. If the file is deleted, the application will use a file by default, **/data/log.txt**. On UNIX systems, either if you specify your desired output file or not, you must grant writing permissions for the directory of choice.
 
 ## General overview
 
@@ -50,7 +53,11 @@ SunriseSunset
 			"date": "2019-06-23"
 		}	
 ```
-Given a city, the application retrieves sunrise/sunset time. The date an the time zone can be parametrized, either using query params (/cities/[i:id]?date=yyyy-mm-dd&timezone=XXXXX) or the built-in web controls inside the city display view. If not provided or invalid, the current date and UTC time are used by default. 
+Given a city, the application retrieves sunrise/sunset time. The date an the time zone can be parametrized, either using query params:
+```console
+/cities/[i:id]?date=yyyy-mm-dd&timezone=XXXXX
+```
+Or the built-in web controls inside the city display view. If not provided or invalid, the current date and UTC time are used by default. 
 
 A more comprehensive list about the API endpoints implemented in the app can we found in **/rest-api** once installed.
 

@@ -12,8 +12,8 @@ abstract class AbstractRestController extends AbstractBaseController {
 	public function __construct(?RequestValidator $requestValidator = NULL) {
 
 		if(!empty($requestValidator)) {
-			$requestValidator->setContentType(['application/json' => 'utf-8']);
-			$requestValidator->setAccept(['application/json' => 'utf-8']);
+			$requestValidator->setRequestContentType(['application/json' => 'utf-8']);				
+			$requestValidator->setResponseAcceptTypes(['application/json' => 'utf-8']);	
 		}
 
 		parent::__construct($requestValidator);

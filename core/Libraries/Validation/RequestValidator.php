@@ -4,6 +4,8 @@ namespace System\Libraries\Validation;
 
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\HeaderBag as SymfonyHeaderBag;
+use Symfony\Component\HttpFoundation\AcceptHeader as SymfonyAcceptHeader;
+
 use System\Libraries\ErrorHandling\Exceptions\Http\HttpExceptionFactory;
 
 
@@ -34,12 +36,13 @@ final class RequestValidator {
 	private const REQUIRED_CONTENT_TYPE = ['PUT', 'POST'];
 
 	private $rules 			= [];		//validation rules for types
-	private $contentTypes 	= [];		//valid content types (input)
+	private $contentType 	= [];		//valid content type (input) in canonical MIME form
 	private $responseTypes	= [];		//valid accept types (output)
 
-	private $correctCharset = FALSE;	//checks for charset first in accept-charset, later on in accept
-	private $errors 		= [];		//validation errors
-	private $validHeaders 	= FALSE;	//flag to validate headers only once in successive input validations
+	private $requireContentCharset 	= FALSE;	//requires a charset specified for the Content-Type: application/json; charset=utf-8
+	private $acceptCharsetIsSet 	= FALSE;	//checks for charset first in accept-charset, later on in accept
+	private $errors 				= [];		//validation errors
+	private $validHeaders 			= FALSE;	//flag to validate headers only once in successive input validations
 
 
 	public function __construct() {
@@ -65,13 +68,19 @@ final class RequestValidator {
 	}
 	
 
-	public function setContentType(array $contentTypes) : void {
-		$this->contentTypes = $contentTypes;
+	public function setRequestContentType(array $contentType, bool $requireContentCharset = FALSE) : void {
+		$this->contentType = $contentType;
+		$this->setRequiredContentCharset($requireContentCharset);
 	}
 
 
-	public function setAccept(array $acceptTypes) : void {
+	public function setResponseAcceptTypes(array $acceptTypes) : void {
 		$this->responseTypes = $acceptTypes;
+	}
+
+
+	public function setRequiredContentCharset(bool $requireContentCharset) : void {
+		$this->requireContentCharset = $requireContentCharset;
 	}
 
 
@@ -90,99 +99,111 @@ final class RequestValidator {
 			throw HttpExceptionFactory::invalidCharset($charset, $this->responseTypes);
 		}
 
-		$this->correctCharset = TRUE;
+		$this->acceptCharsetIsSet = TRUE;
 
 	}
 
 
-	private function assertContentType(SymfonyHeaderBag $headers, string $method) : void {
-
-		$content_type = $headers->get('content-type');
+	private function assertContentType(SymfonyRequest $request) : void {
 
 		//https://stackoverflow.com/questions/5661596/do-i-need-a-content-type-for-http-get-requests
 		//It means that the Content-Type HTTP header should be set only for PUT and POST requests.
-		if(empty($content_type)) {
+		if(!in_array($request->getMethod(), self::REQUIRED_CONTENT_TYPE)) {
+			return;
+		}
 
-			//no content type, but not needed anyway
-			if(!in_array($method, self::REQUIRED_CONTENT_TYPE)) {
-				return;
-			}
+		/*
+		//this gives the Content-Type in the canonical MIME form (application/json => json), and no context about the charset
+		$contentType = $request->get(ContentType();
 
-			//PUT or POST: sorry, but this fails
-			throw HttpExceptionFactory::missingMediaType(array_keys($this->contentTypes));
+		if(!in_array($contentType, $this->contentType)) {
+			throw HttpExceptionFactory::unsupportedMediaType($content_type, array_keys($this->contentType));
+		}
+		*/
+
+		//request with body, but content type not set
+		$contentType = $request->headers->get('content-type');
+
+		if(empty($contentType)) {
+			throw HttpExceptionFactory::missingMediaType($this->contentType);
+		}
+
+		//check if charset is specified
+		$charset = NULL;
+
+		if(strpos($contentType, 'charset=') !== FALSE) {
+
+			list($contentType, $charset) = explode(';', $contentType);
+			list(, $charset) =  explode('charset=', trim($charset));
+			$charset = strtolower(str_replace(';', '', $charset));
 
 		}
 
-		$types = explode(',', $content_type);
-
-		foreach($types as &$type) {
-
-			if(strpos($type, ';charset=')) {
-
-				list($type, $charset) = explode(';charset=', $type);
-
-				if($this->correctCharset) {
-					continue;
-				}
-
-				$charset = strtolower(str_replace(';', '', $charset));
-
-				if(array_key_exists($type, $this->contentTypes) && $this->contentTypes[$type] !== $charset) {
-					throw HttpExceptionFactory::unsupportedMediaTypeCharset($type, $charset, $this->contentTypes);
-				}
-
-			}
-
+		//Content-Type is invalid
+		if($contentType !== key($this->contentType)) {
+			throw HttpExceptionFactory::unsupportedMediaType($contentType, $this->contentType);
 		}
 
-		if(empty(array_intersect($types, array_keys($this->contentTypes)))) {
-			throw HttpExceptionFactory::unsupportedMediaType($content_type, array_keys($this->contentTypes));
+		//Content-Type is valid, if the content charset is not required we are done here
+		if(!$this->requireContentCharset) {
+			return;
+		}
+
+		//charset not specified
+		if($this->requireContentCharset && is_null($charset)) {
+			throw HttpExceptionFactory::unspecifiedMediaTypeCharset($contentType, $this->contentType);
+		}
+
+		//invalid charset
+		if($this->requireContentCharset && $charset !== $this->contentType[$contentType]) {
+			throw HttpExceptionFactory::unsupportedMediaTypeCharset($contentType, $charset, $this->contentType);
 		}
 
 	}
 
 
-	private function assertAccept(SymfonyHeaderBag $headers) : void {
+	private function assertAccept(SymfonyRequest $request) : void {
 
-		//browser always fills with predefined */* if not specified. We assume if nothing is specified, they will expect anything
-		$accept = $headers->get('accept') ?? '*/*'; 
-		$types = explode(',', $accept);
+		$acceptHeader = SymfonyAcceptHeader::fromString($request->headers->get('accept'));
 
-		//strip the priority and look up for possible implicit charsets
-		foreach($types as &$type) {
-
-			if(strpos($type, ';q=')) {
-				list($type, $priority) = explode(';q=', $type);
-				$priority = str_replace(';', '', $priority);
-			}
-
-			if(strpos($type, ';charset=')) {
-
-				list($type, $charset) = explode(';charset=', $type);
-
-				if($this->correctCharset) {
-					continue;
-				}
-
-				$charset = strtolower(str_replace(';', '', $charset));
-
-				if(array_key_exists($type, $this->contentTypes) && $this->contentTypes[$type] !== $charset) {
-					throw HttpExceptionFactory::notAcceptableCharset($type, $charset, $this->responseTypes);
-				}
-
-			}
-
-		}
-
-		//default MIME type present: requester accepts anything, so escape 
-		if(in_array(self::DEFAULT_MIME_TYPE, $types)) {
+		//default MIME type present, or void Accept values: we asume requester accepts anything, so escape 
+		if($acceptHeader->has(self::DEFAULT_MIME_TYPE) || empty($acceptHeader->all())) {
 			return;
 		}
 
-		//explicit types requested, mandatory, check for coincidence with our response types
-		if(empty(array_intersect($types, array_keys($this->responseTypes)))) {
-			throw HttpExceptionFactory::notAcceptable($accept, array_keys($this->responseTypes));
+		foreach($acceptHeader->all() as $acceptType => $headerItem) {
+
+			//type doesn't match
+			if(!array_key_exists($acceptType, $this->responseTypes)) {
+				continue;
+			}
+
+			//type matches and no need to check the charset, has been provided before with an Accept-Charset header (which has priority)
+			if($this->acceptCharsetIsSet) {
+				return;
+			}
+
+			$charset = $headerItem->getAttribute('charset');
+
+			//charset not set implicitly
+			if(is_null($charset)) {
+				throw HttpExceptionFactory::missingAcceptCharset($acceptType, $this->responseTypes);
+			}
+
+			$charset = strtolower($charset);
+
+			//charset is invalid
+			if($this->responseTypes[$acceptType] !== $charset) {
+				throw HttpExceptionFactory::notAcceptableCharset($acceptType, $charset, $this->responseTypes);
+			}
+
+			//success, so return
+			return;
+
 		}
+
+		//no matches found
+		throw HttpExceptionFactory::notAcceptable($request->headers->get('accept'), array_keys($this->responseTypes));
 
 	}
 
@@ -192,8 +213,8 @@ final class RequestValidator {
 
 		if(!$this->validHeaders) {
 			$this->assertAcceptCharset($request->headers);
-			$this->assertContentType($request->headers, $request->getMethod());
-			$this->assertAccept($request->headers);
+			$this->assertContentType($request);
+			$this->assertAccept($request);
 		}
 
 		$this->validHeaders = TRUE;

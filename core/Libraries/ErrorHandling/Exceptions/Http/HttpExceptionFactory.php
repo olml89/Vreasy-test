@@ -15,30 +15,6 @@ class HttpExceptionFactory {
 	}
 
 
-	public static function badRequestErrorFields(array $errorFields) : HttpException400 {
-
-		$errorFields = array_map(function(string $expectedType, string $errorField) : string {
-				return $errorField.' ('.$expectedType.')';
-			}, $errorFields, array_keys($errorFields)
-		);
-
-		return new HttpException400('Errors in the following input fields: '.implode(', ', $errorFields));
-
-	}
-
-
-	public static function badRequestInvalidValues(array $invalidValues) : HttpException400 {
-
-		$invalidValues = array_map(function(string $correctValue, string $field) : string {
-				return $field.' '.$correctValue;
-			}, $invalidValues, array_keys($invalidValues)
-		);
-
-		return new HttpException400('Invalid values: '.implode(', ', $invalidValues));
-
-	}
-
-
 	public static function unauthorized() : HttpException401 {
 		return new HttpException401('Credentials missing');
 	}
@@ -64,18 +40,23 @@ class HttpExceptionFactory {
 	}
 
 
+	public static function invalidCharset(string $unsupportedCharset, array $acceptedCharsets) : HttpException406 {
+		return new HttpException406('Not acceptable charset '.$unsupportedCharset.', accepted charsets: '.implode(', ', $acceptedCharsets));
+	}
+
+
 	public static function notAcceptable(string $accept, array $acceptedTypes) : HttpException406 {
 		return new HttpException406('Not acceptable request types: '.$accept.', response types: '.implode(', ', $acceptedTypes));
 	}
 
 
 	public static function notAcceptableCharset(string $accept, string $unsupportedCharset, array $acceptedTypes) : HttpException406 {
-		return new HttpException406('Not acceptable charset '.$unsupportedCharset.' for accepted request types '.$accept.', acceptable charset: '.$acceptedTypes[$accept]);
+		return new HttpException406('Not acceptable charset '.$unsupportedCharset.' for accepted request type '.$accept.', acceptable charset: '.$acceptedTypes[$accept]);
 	}
 
 
-	public static function invalidCharset(string $unsupportedCharset, array $acceptedCharsets) : HttpException406 {
-		return new HttpException406('Not acceptable charset '.$unsupportedCharset.', accepted charsets: '.implode(', ', $acceptedCharsets));
+	public static function missingAcceptCharset(string $accept, array $acceptedTypes) : HttpException406 {
+		return new HttpException406('Missing charset for accepted request type '.$accept.', acceptable charset: '.$acceptedTypes[$accept]);
 	}
 
 
@@ -84,23 +65,52 @@ class HttpExceptionFactory {
 	}
 
 
-	public static function missingMediaType(array $supportedTypes) : HttpException415 {
-		return new HttpException415('The request misses a correct type, supported types: '.implode(', ', $supportedTypes));
+	public static function missingMediaType(array $supportedType) : HttpException415 {
+		return new HttpException415('The request misses a correct type, supported type: '.key($supportedType));
 	}
 
 
-	public static function unsupportedMediaType(string $type, array $supportedTypes) : HttpException415 {
-		return new HttpException415('Unsupported input media type: '.$type.', supported types: '.implode(', ', $supportedTypes));
+	public static function unsupportedMediaType(string $type, array $supportedType) : HttpException415 {
+		return new HttpException415('Unsupported input media type: '.$type.', supported type: '.key($supportedType));
 	}
 
 
-	public static function unsupportedMediaTypeCharset(string $type, string $unsupportedCharset, array $supportedTypes) : HttpException415 {
-		return new HttpException415('Unsupported charset '.$unsupportedCharset.' for input media types '.$type.', supported charset: '.$supportedTypes[$type]);
+	public static function unspecifiedMediaTypeCharset(string $type, array $supportedType) : HttpException415 {
+		return new HttpException415('Unspecified charset for input media type '.$type.', supported charset: '.$supportedType[$type]);
+	}
+
+
+	public static function unsupportedMediaTypeCharset(string $type, string $unsupportedCharset, array $supportedType) : HttpException415 {
+		return new HttpException415('Unsupported charset '.$unsupportedCharset.' for input media type '.$type.', supported charset: '.$supportedType[$type]);
 	}
 
 
 	public static function unprocessableEntity() : HttpException422 {
 		return new HttpException422('The server understands the content type and the syntax of the request is correct, but the request entity is not valid');
+	}
+
+
+	public static function badRequestErrorFields(array $errorFields) : HttpException400 {
+
+		$errorFields = array_map(function(string $expectedType, string $errorField) : string {
+				return $errorField.' ('.$expectedType.')';
+			}, $errorFields, array_keys($errorFields)
+		);
+
+		return new HttpException400('Errors in the following input fields: '.implode(', ', $errorFields));
+
+	}
+
+
+	public static function badRequestInvalidValues(array $invalidValues) : HttpException400 {
+
+		$invalidValues = array_map(function(string $correctValue, string $field) : string {
+				return $field.' '.$correctValue;
+			}, $invalidValues, array_keys($invalidValues)
+		);
+
+		return new HttpException400('Invalid values: '.implode(', ', $invalidValues));
+
 	}
 
 

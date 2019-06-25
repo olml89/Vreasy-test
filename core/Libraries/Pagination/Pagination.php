@@ -89,15 +89,21 @@ final class Pagination {
 	}
 
 
-	public function getPrevPage() : int {
+	public function getPrevPage() : ?int {
+
+		if($this->current_page === 1) {
+			return NULL;
+		}
+
 		return $this->current_page - 1;
+
 	}
 
 
-	public function getNextPage() : int {
+	public function getNextPage() : ?int {
 
 		if($this->current_page === $this->num_pages) {
-			return 0;
+			return NULL;
 		}
 
 		return $this->current_page + 1;
