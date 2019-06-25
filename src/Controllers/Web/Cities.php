@@ -219,16 +219,4 @@ final class Cities extends AbstractWebController {
 	}
 
 
-
-	public function test() {
-
-		$c = $this->cityRepository->getById(1);
-		$s = $this->sunriseSunsetRepository->getByCity($c);
-		$c->setSunriseSunset(NULL);
-		echo json_encode($c);
-		die();
-
-	}
-
-
 }

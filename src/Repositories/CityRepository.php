@@ -120,7 +120,7 @@ final class CityRepository {
 			$pagination->setNumPages($numResults);
 
 			$limit = $pagination->getLimit();
-			$offset = ($pagination->getCurrentPage() - 1) * $limit;
+			$offset = ($pagination->getCurrentPage() - 1) * $limit;	
 			$query .= " LIMIT $limit OFFSET $offset";
 
 		}

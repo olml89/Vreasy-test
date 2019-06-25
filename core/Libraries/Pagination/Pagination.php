@@ -60,8 +60,8 @@ final class Pagination {
 		//calculate number of pages accounting the current limit
 		$this->num_pages = (int)ceil($total_items / $this->limit);
 
-		//rectify current page if over the rank
-		if($this->current_page > $this->num_pages) {
+		//rectify current page if over the rank (and if pagination needed: when num_pages is 0, page must remain 1)
+		if($this->num_pages > 0 && $this->current_page > $this->num_pages) {
 			$this->current_page = $this->num_pages;
 		}
 
