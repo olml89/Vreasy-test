@@ -7,6 +7,7 @@ use Whoops\Handler\HandlerInterface;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Handler\JsonResponseHandler;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 use System\Libraries\Templating\Templater;
 use System\Libraries\Configuration\Configuration;
@@ -20,7 +21,7 @@ final class WhoopsWrapper {
 	private $whoops 	= NULL; // \Whoops\Run
 	private $templater 	= NULL; // \System\Libraries\Templating\Templater
 	private $config 	= NULL; // \System\Libraries\Configuration\Configuration
-
+	private $request 	= NULL; // \Symfony\Component\HttpFoundation\Request
 
 	public function __construct(Run $whoops, Templater $templater, Configuration $config) {
 
@@ -34,7 +35,8 @@ final class WhoopsWrapper {
 	}
 
 
-	public function bootstrap(bool $cli, bool $ajax, bool $debug) : WhoopsWrapper {
+	public function bootstrap(bool $cli, bool $ajax, bool $debug, SymfonyRequest $request) : WhoopsWrapper {
+		$this->request = $request;
 		$this->whoops->pushHandler($this->getHandler($cli, $ajax, $debug));
 		return $this;
 	}
@@ -58,7 +60,7 @@ final class WhoopsWrapper {
 
 
 	private function getHtmlHandler(bool $debug) : HandlerInterface {
-		$handler = $debug? new PrettyPageHandler : new PrettyPageProductionHandler($this->templater, $this->config); 
+		$handler = $debug? new PrettyPageHandler : new PrettyPageProductionHandler($this->templater, $this->config, $this->request); 
 		$handler->handleUnconditionally(TRUE);
 		return $handler;
 	}

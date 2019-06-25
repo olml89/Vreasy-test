@@ -21,13 +21,15 @@ final class Info extends AbstractWebController {
 	// GET /
 	public function index(SymfonyRequest $request) : SymfonyResponse {
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('application');
 
 		//display views
 		$data = [
 			'base_url'	=> $base_url,
+			'full_url'	=> $full_url,
 			'sidebar'	=> $sidebar,
 		];
 
@@ -40,13 +42,15 @@ final class Info extends AbstractWebController {
 	// GET /rest-api
 	public function printApiInfo(SymfonyRequest $request) : SymfonyResponse {
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('rest-api');
 
 		//display views
 		$data = [
 			'base_url'	=> $base_url,
+			'full_url'	=> $full_url,
 			'sidebar'	=> $sidebar,
 		];
 

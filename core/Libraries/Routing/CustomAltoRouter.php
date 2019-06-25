@@ -19,18 +19,23 @@ final class CustomAltoRouter extends AltoRouter {
 	private $routeFactory = NULL; // \System\Libraries\Routing\Route\RouteFactory
 
 
-	public function __construct(RouteFactory $routeFactory, string $basePath, array $routes) {
-		parent::__construct($routes, $basePath);
+	public function __construct(RouteFactory $routeFactory, array $routes) {
+		parent::__construct($routes);
 		$this->routeFactory = $routeFactory;
 	}
 
 
 	public function getMatch(SymfonyRequest $request) : ?RouteInterface {
 
-		$match = $this->match(
-			$request->server->get('REQUEST_URI') ?? DEFAULT_URI, 
-			$request->server->get('REQUEST_METHOD') ?? DEFAULT_METHOD
-		);
+		//not used anymore inside match()
+		//$this->setBasePath($request->getBasePath());
+
+		//get the request uri and the method
+		$requestUri = $request->getPathInfo() ?: self::DEFAULT_URI;
+		$requestMethod = $request->getMethod() ?: self::DEFAULT_METHOD;
+
+		//try to find a match
+		$match = $this->match($requestUri, $requestMethod);
 
 		if($match === FALSE) {
 			return NULL;
@@ -42,28 +47,20 @@ final class CustomAltoRouter extends AltoRouter {
 
 
 	/**
-	 * Match a given Request Url against stored routes
-	 * @param string $requestUrl
+	 * Match a given request Uri against stored routes
+	 * @param string $requestUri
 	 * @param string $requestMethod
 	 * @return array|boolean Array with route information on success, array with allowed methods when 405, FALSE on failure (404).
 	 */
-	public function match($requestUrl = NULL, $requestMethod = NULL) {
+	public function match($requestUri = NULL, $requestMethod = NULL) {
 
 		$allowed_methods = [];
 		$params = [];
 		$match = FALSE;
-
-		//strip base path from request url
-		$requestUrl = substr($requestUrl, strlen($this->basePath));
-
-		//strip query string (?a=b) from Request Url, BUT capture the query string
-		if(($strpos = strpos($requestUrl, '?')) !== FALSE) {
-			$requestUrl = substr($requestUrl, 0, $strpos);
-		}
 		
 		//strip last slash unless / is requested
-		if(strlen($requestUrl) > 1 && substr($requestUrl, -1) === '/') {
-			$requestUrl = substr($requestUrl, 0, strlen($requestUrl) -1);
+		if($requestUri !== self::DEFAULT_URI && substr($requestUri, -1) === '/') {
+			$requestUri = substr($requestUri, 0, strlen($requestUri) -1);
 		}
 
 		//iterate over the routes to find matches
@@ -79,7 +76,7 @@ final class CustomAltoRouter extends AltoRouter {
 			//@ regex delimiter
 			elseif(isset($_route[0]) && $_route[0] === '@') {
 				$pattern = '`' . substr($_route, 1) . '`u';
-				$match = (bool)preg_match($pattern, $requestUrl, $params); // FALSE, 0, 1 == match
+				$match = (bool)preg_match($pattern, $requestUri, $params); // FALSE, 0, 1 == match
 			} 
 
 			else {
@@ -107,7 +104,7 @@ final class CustomAltoRouter extends AltoRouter {
 							$regex = $n === '?' || $n === '+' || $n === '*' || $n === '{';
 						}
 
-						if($regex === FALSE && $c !== '/' && (!isset($requestUrl[$j]) || $c !== $requestUrl[$j])) {
+						if($regex === FALSE && $c !== '/' && (!isset($requestUri[$j]) || $c !== $requestUri[$j])) {
 							continue 2;
 						}
 
@@ -119,7 +116,7 @@ final class CustomAltoRouter extends AltoRouter {
 				}
 
 				$regex = $this->compileRoute($route);
-				$match = (bool)preg_match($regex, $requestUrl, $params); // FALSE, 0, 1 == match
+				$match = (bool)preg_match($regex, $requestUri, $params); // FALSE, 0, 1 == match
 
 			}
 

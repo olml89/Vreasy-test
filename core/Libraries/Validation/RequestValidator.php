@@ -281,19 +281,19 @@ final class RequestValidator {
 		$processedInput = $this->getValidJsonInputFields($request, $expectedFields);
 
 		if(is_null($processedInput)) {
-			throw HttpExceptionFactory::badRequestMalformedJson();
+			throw HttpExceptionFactory::badRequest('Malformed request body');
 		}
 
 		if(empty($processedInput) && empty($this->errors)) {
-			throw HttpExceptionFactory::badRequestErrorFields($expectedFields);	
+			throw HttpExceptionFactory::unprocessableEntityErrorFields($expectedFields);	
 		}
 
 		if(empty($processedInput) && !empty($this->errors)) {
-			throw HttpExceptionFactory::badRequestUnexpectedFields($this->errors);
+			throw HttpExceptionFactory::unprocessableEntityUnexpectedFields($this->errors);
 		}
 
 		if(!empty($processedInput) && !empty($this->errors)) {
-			throw HttpExceptionFactory::badRequestErrorFields($this->errors);
+			throw HttpExceptionFactory::unprocessableEntityErrorFields($this->errors);
 		}
 
 		return $processedInput;
@@ -311,11 +311,11 @@ final class RequestValidator {
 		$processedInput = $this->getValidJsonInputFields($request, $expectedFields);
 
 		if(is_null($processedInput)) {
-			throw HttpExceptionFactory::badRequestMalformedJson();
+			throw HttpExceptionFactory::badRequest('Malformed request body');
 		}
 
 		if(empty($processedInput) && !empty($this->errors)) {
-			throw HttpExceptionFactory::badRequestUnexpectedFields($this->errors);
+			throw HttpExceptionFactory::unprocessableEntityUnexpectedFields($this->errors);
 		}
 
 		return $processedInput;

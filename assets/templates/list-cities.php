@@ -13,6 +13,7 @@ return [
     ],
 
     'vw_sidebar' => [
+        'base_url',
         'sidebar'
     ],
 
@@ -23,7 +24,7 @@ return [
     ],
 
     'vw_footer' => [
-        'base_url'
+        'full_url'
     ]
 
 ];

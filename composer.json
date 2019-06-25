@@ -23,11 +23,7 @@
         "psr-4": {
             "Application\\": "src/",
             "System\\": "core/"
-        },
-        "files": [
-            "core/Helpers/urls.php",
-            "core/Helpers/arrays.php"
-        ]
+        }
     },
     "license": "MIT",
     "require-dev": {

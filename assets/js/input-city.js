@@ -89,7 +89,7 @@ var InputCity = (function() {
 
 		//retrieve the connection data
 		_method = method;
-		_endpoint = Application.getBaseUrl() + endpoint;
+		_endpoint = Application.getRemoteUrl() + endpoint;
 
 		//disable traditional form submission
 		$('#cityForm').submit(function(e) {

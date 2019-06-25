@@ -77,7 +77,10 @@ final class Application {
 		$route = $this->container->get('router')->getMatch($request);
 
 		if(is_null($route)) {
-			throw HttpExceptionFactory::pageNotFound(current_url());
+
+			$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl().$request->getPathInfo();
+			throw HttpExceptionFactory::pageNotFound($full_url);
+
 		}
 
 		if(!$route->isValidMethod()) {

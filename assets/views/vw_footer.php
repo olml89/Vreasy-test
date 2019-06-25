@@ -1,6 +1,6 @@
 		    
 			    <!-- Sticky Footer -->
-			    <footer class="sticky-footer" data-base-url="<?=$base_url;?>"> 
+			    <footer class="sticky-footer" data-remote-url="<?=$full_url;?>"> 
 			        <div class="container my-auto">
 			            <div class="copyright text-center my-auto">
 			                <span>Copyright© Oleguer Mas, 2019</span>
@@ -32,7 +32,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/components/prism-csharp.min.js"></script>
 		
 		<!-- Application script -->
-		<script src="<?=$base_url;?>/js/bundle.min.js"></script>
+		<script src="<?=$full_url;?>/js/bundle.min.js"></script>
 
 	</body>
 

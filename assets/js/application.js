@@ -2,12 +2,12 @@
 var Application = (function() {
 
 
-	var _baseUrl = '';
+	var _remoteUrl = '';
 	var _requestUri = '';
 
 
-	var getBaseUrl = function() {
-		return _baseUrl;
+	var getRemoteUrl = function() {
+		return _remoteUrl;
 	};
 
 
@@ -106,9 +106,9 @@ var Application = (function() {
 	};
 
 
-	var init = function(baseUrl) {
-		_baseUrl = baseUrl;
-		_requestUri = window.location.href.replace(baseUrl, '');
+	var init = function(remoteUrl) {
+		_remoteUrl = remoteUrl;
+		_requestUri = window.location.href.replace(remoteUrl, '');
 	};
 
 
@@ -117,7 +117,7 @@ var Application = (function() {
 		//public functions
 		init: 				init,
 
-		getBaseUrl: 		getBaseUrl,
+		getRemoteUrl: 		getRemoteUrl,
 		getRequestUri: 		getRequestUri,
 		getScrollDirection: getScrollDirection,
 
@@ -141,8 +141,8 @@ var Application = (function() {
 $(function() {
 
 	//setting up application
-	let baseUrl = $('footer').data('baseUrl'); 
-	Application.init(baseUrl);
+	let remoteUrl = $('footer').data('remoteUrl'); 
+	Application.init(remoteUrl);
 
 	//routing
 	switch(true) {

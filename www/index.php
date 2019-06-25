@@ -105,7 +105,6 @@ $builder->addDefinitions([
 
     	return new \System\Libraries\Routing\CustomAltoRouter(
             new \System\Libraries\Routing\Route\RouteFactory,
-            base_path(), 
             $config->get('routes')
         );
 

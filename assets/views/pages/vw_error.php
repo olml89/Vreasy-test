@@ -3,7 +3,7 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="<?=base_url();?>">Application</a>
+            <a href="<?=$base_url;?>">Application</a>
         </li>
         <li class="breadcrumb-item active">Error <?=$exception->getCode();?></li>
     </ol>

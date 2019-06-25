@@ -64,7 +64,8 @@ final class Cities extends AbstractRestController {
 		if(!empty($cities)) {
 
 			$response['cities'] = $cities;
-			$pages = $this->pagination->getNavigationLinks(base_url().'/api/cities', $request->query);
+			$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
+			$pages = $this->pagination->getNavigationLinks($full_url.'/api/cities', $request->query);
 
 			if(!empty($pages)) {
 				$response['pages'] = $pages;
@@ -162,7 +163,8 @@ final class Cities extends AbstractRestController {
 		if(!empty($cities)) {
 
 			$response['cities'] = $cities;
-			$pages = $this->pagination->getNavigationLinks(base_url().'/api/cities', $request->query);
+			$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
+			$pages = $this->pagination->getNavigationLinks($full_url.'/api/cities', $request->query);
 
 			if(!empty($pages)) {
 				$response['pages'] = $pages;
@@ -190,7 +192,7 @@ final class Cities extends AbstractRestController {
 		$invalidCoordinates = $this->cityFactory->getInvalidCoordinates($post['latitude'], $post['longitude']);
 
 		if(!empty($invalidCoordinates)) {
-			throw HttpExceptionFactory::badRequestInvalidValues($invalidCoordinates); 
+			throw HttpExceptionFactory::unprocessableEntityInvalidValues($invalidCoordinates); 
 		}
 
 		//all is correct, create the city and try to save it
@@ -200,7 +202,7 @@ final class Cities extends AbstractRestController {
 			throw HttpExceptionFactory::failure('City could not be created');
 		}
 
-		$resource_url = base_url().'/api/cities/'.$city->getId();
+		$resource_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl().'/api/cities/'.$city->getId();
 		return new SymfonyJsonResponse($city, 201, ['Location' => $resource_url]);	// HTTP 201 CREATED
 
 	}
@@ -231,7 +233,7 @@ final class Cities extends AbstractRestController {
 		$invalidCoordinates = $this->cityFactory->getInvalidCoordinates($post['latitude'], $post['longitude']);
 
 		if(!empty($invalidCoordinates)) {
-			throw HttpExceptionFactory::badRequestInvalidValues($invalidCoordinates); 
+			throw HttpExceptionFactory::unprocessableEntityInvalidValues($invalidCoordinates); 
 		}
 
 		//create a new city from the previous one and change the fields
@@ -275,7 +277,7 @@ final class Cities extends AbstractRestController {
 		$invalidCoordinates = $this->cityFactory->getInvalidCoordinates($post['latitude'], $post['longitude']);
 
 		if(!empty($invalidCoordinates)) {
-			throw HttpExceptionFactory::badRequestInvalidValues($invalidCoordinates); 
+			throw HttpExceptionFactory::unprocessableEntityInvalidValues($invalidCoordinates); 
 		}
 
 		//create a new city from the previous one and change the fields if needed

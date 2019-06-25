@@ -120,7 +120,7 @@ var ListCities = (function() {
 	var init = function(endpoint) {
 
 		//retrieve the connection data
-		_endpoint = Application.getBaseUrl() + endpoint;
+		_endpoint = Application.getRemoteUrl() + endpoint;
 
 		//connect the click event of the delete button to deleting a city with AJAX
 		$(document).on('click', '.cityDeleteButton', deleteCity);

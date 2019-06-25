@@ -5,13 +5,8 @@ namespace System\Libraries\ErrorHandling\Exceptions\Http;
 class HttpExceptionFactory {
 
 
-	public static function badRequestMalformedJson() : HttpException400 {
-		return new HttpException400('Malformed JSON body');
-	}
-
-
-	public static function badRequestUnexpectedFields(array $unexpectedFields) : HttpException400 {
-		return new HttpException400('Unexpected input fields: '.implode(', ', $unexpectedFields));
+	public static function badRequest(string $message = 'Malformed request body') : HttpException400 {
+		return new HttpException400($message);
 	}
 
 
@@ -90,26 +85,31 @@ class HttpExceptionFactory {
 	}
 
 
-	public static function badRequestErrorFields(array $errorFields) : HttpException400 {
+	public static function unprocessableEntityUnexpectedFields(array $unexpectedFields) : HttpException422 {
+		return new HttpException422('Unexpected input fields: '.implode(', ', $unexpectedFields));
+	}
+
+
+	public static function unprocessableEntityErrorFields(array $errorFields) : HttpException422 {
 
 		$errorFields = array_map(function(string $expectedType, string $errorField) : string {
 				return $errorField.' ('.$expectedType.')';
 			}, $errorFields, array_keys($errorFields)
 		);
 
-		return new HttpException400('Errors in the following input fields: '.implode(', ', $errorFields));
+		return new HttpException422('Errors in the following input fields: '.implode(', ', $errorFields));
 
 	}
 
 
-	public static function badRequestInvalidValues(array $invalidValues) : HttpException400 {
+	public static function unprocessableEntityInvalidValues(array $invalidValues) : HttpException422 {
 
 		$invalidValues = array_map(function(string $correctValue, string $field) : string {
 				return $field.' '.$correctValue;
 			}, $invalidValues, array_keys($invalidValues)
 		);
 
-		return new HttpException400('Invalid values: '.implode(', ', $invalidValues));
+		return new HttpException422('Invalid values: '.implode(', ', $invalidValues));
 
 	}
 

@@ -10,7 +10,7 @@ use System\Libraries\ErrorHandling\Exceptions\Http\HttpException406 as HttpNotAc
 use System\Libraries\ErrorHandling\Exceptions\Http\HttpException415 as HttpUnsupportedMediaType415; 
 
 
-class RequestValidationTest extends TestCase {
+class RequestValidationHeadersTest extends TestCase {
 
 
 	protected $request 			= NULL; // \Symfony\Component\HttpFoundation\Request

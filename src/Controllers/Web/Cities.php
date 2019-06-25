@@ -54,13 +54,15 @@ final class Cities extends AbstractWebController {
 		$cities = $this->cityRepository->getList($this->pagination);
 		$pages = $this->pagination->getPages();
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('cities');
 
 		//display views
 		$data = [
 			'base_url'	=> $base_url,
+			'full_url'	=> $full_url,
 			'sidebar'	=> $sidebar,
 			'cities'	=> $cities,
 			'pages'		=> $pages
@@ -97,13 +99,15 @@ final class Cities extends AbstractWebController {
 		//get timezones
 		$timezones = \DateTimeZone::listIdentifiers(); 
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('cities');
 
 		//display views
 		$data = [
 			'base_url'		=> $base_url,
+			'full_url'		=> $full_url,
 			'sidebar'		=> $sidebar,
 			'city'			=> $city,
 			'timezones'		=> $timezones,
@@ -119,7 +123,7 @@ final class Cities extends AbstractWebController {
 	// POST /cities/[i:id]
 	public function recalculateSunriseSunset(SymfonyRequest $request, int $id) : SymfonyResponse {
 
-		$redirectUrl = base_url().'/cities/'.$id;
+		$redirectUrl = $request->getBaseUrl().'/cities/'.$id;
 
 		$post = $this->requestValidator->assertFlexibleFormInput($request, [
 			'date'		=> 'string', 
@@ -154,13 +158,15 @@ final class Cities extends AbstractWebController {
 		$cities = $this->cityRepository->search($post, $this->pagination);
 		$pages = $this->pagination->getPages();
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('cities');
 
 		//display views
 		$data = [
 			'base_url'			=> $base_url,
+			'full_url'			=> $full_url,
 			'search_criteria' 	=> $post,
 			'sidebar'			=> $sidebar,
 			'cities'			=> $cities,
@@ -176,13 +182,15 @@ final class Cities extends AbstractWebController {
 	// GET /cities/new
 	public function createCity(SymfonyRequest $request) : SymfonyResponse {
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('new-city');
 
 		//display views
 		$data = [
 			'base_url'	=> $base_url,
+			'full_url'	=> $full_url,
 			'sidebar'	=> $sidebar,
 		];
 
@@ -202,13 +210,15 @@ final class Cities extends AbstractWebController {
 			throw HttpExceptionFactory::notFound('City '.$id.' could not be found');
 		}
 
-		//base url and sidebar
-		$base_url = base_url();
+		//frontend variables
+		$base_url = $request->getBaseUrl();
+		$full_url = $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl();
 		$sidebar = $this->getSidebar('cities');
 
 		//display views
 		$data = [
 			'base_url'	=> $base_url,
+			'full_url'	=> $full_url,
 			'sidebar'	=> $sidebar,
 			'city'		=> $city
 		];

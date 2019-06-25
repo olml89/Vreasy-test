@@ -5,6 +5,7 @@ namespace System\Libraries\ErrorHandling;
 use Psr\Log\LoggerInterface;
 
 use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 
@@ -19,9 +20,9 @@ use System\Libraries\ErrorHandling\Exceptions\Http\HttpExceptionFactory;
 final class ErrorHandler {
 
 
-	private $whoops  	= NULL; // \Whoops\Run
+	private $whoops  	= NULL; // \System\Libraries\ErrorHandling\Whoops\WhoopsWrapper
 	private $log 	 	= NULL; // \Psr\Log\LoggerInterface (\Monolog\logger)
-	private $app 		= NULL; // \System\Application
+	private $request 	= NULL; // \Symfony\Component\HttpFoundation\Request
 
 	private $debug 		= TRUE;
 	private $isAjax  	= FALSE;
@@ -35,17 +36,18 @@ final class ErrorHandler {
 
 	public function bootstrap(Application $app) : ErrorHandler {
 
-		//save the app instance
-		$this->app = $app;
+		//save the request
+		$this->request = $app->getRequest();
 
 		//set the environment
 		$this->debug 	= !$app->isEnvironment(Application::PRODUCTION);
-		$this->isAjax 	= $app->getRequest()->isXmlHttpRequest();
+		$this->isAjax 	= $this->request->isXmlHttpRequest();
 
 		$this->whoops->bootstrap(
 			$app->isRunningInConsole(),
 			$this->isAjax,
-			$this->debug
+			$this->debug,
+			$this->request
 		);
 
 		//return self to chain calls
@@ -159,7 +161,7 @@ final class ErrorHandler {
 		$response = $this->isAjax? SymfonyJsonResponse::fromJsonString($content, $status) : SymfonyResponse::create($content, $status);
 
 		//send the response and terminate the application gracefully with an error code 1
-		$response->prepare($this->app->getRequest())->send();
+		$response->prepare($this->request)->send();
 		exit(Application::EXIT_ERROR);
 
 	}

@@ -162,7 +162,7 @@ var ViewCity = (function() {
 	var init = function(endpoint) {
 
 		//retrieve the connection data
-		_endpoint = Application.getBaseUrl() + endpoint;
+		_endpoint = Application.getRemoteUrl() + endpoint;
 
 		//http://www.daterangepicker.com/#examples
 		$('#dateSelector').daterangepicker({

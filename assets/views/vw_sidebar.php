@@ -6,7 +6,7 @@
         <?php if(!empty($sidebar)): foreach($sidebar as $link):?>
 
         <li class="nav-item<?php if($link['active']):?> active<?php endif;?>">
-            <a class="nav-link" href="<?=base_url().$link['uri'];?>">
+            <a class="nav-link" href="<?=$base_url.$link['uri'];?>">
                 <i class="fas fa-fw fa-<?=$link['icon'];?>"></i>
                 <span><?=$link['text'];?></span>
             </a>
