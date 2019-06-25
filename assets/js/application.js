@@ -164,7 +164,15 @@ $(function() {
 			console.log('/cities');
 			Application.Modules.ListCities.init('/api/cities');	//DELETE and POST (recover)
 			break;
-	
+
+		// /cities/search(/page-[i:page])
+		case Application.getRequestUri().match(/^(\/cities\/search)$/) !== null:
+		case Application.getRequestUri().match(/^(\/cities\/search\/page-)[0-9]+/) !== null: 
+
+			console.log('/cities/search');
+			Application.Modules.ListCities.init('/api/cities');	//DELETE and POST (recover)
+			break;
+
 		// /cities/[i:id]
 		case Application.getRequestUri().match(/^(\/cities\/)[0-9]+/) !== null:
 
