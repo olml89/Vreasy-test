@@ -12,12 +12,10 @@
 	</testsuites>
 
 	<filter>
-		<blacklist>
-	    		<directory suffix=".php">./assets</directory>
-			<directory suffix=".php">./config</directory>
-			<directory suffix=".php">./vendor</directory>
-			<directory suffix=".php">./www</directory>
-		</blacklist>
+		<whitelist>
+	    		<directory suffix=".php">./core</directory>
+			<directory suffix=".php">./src</directory>
+		</whitelist>
 	</filter>
 
 </phpunit>
