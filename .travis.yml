@@ -1,15 +1,17 @@
 
-#Set language
+#http://kizu514.com/blog/setting-up-coveralls-io-with-travis-ci-and-phpunit/
+
 language: php
 
-#Set versions
+before_install:
+- composer require phpunit/phpunit:4.8.* satooshi/php-coveralls:dev-master
+- composer install --dev
 
-#Install composer and require coveralls package
-#https://gist.github.com/khaosdoctor/5f6989c4fc27ecc03955
 install:
 - composer install --no-interaction
-- composer require satooshi/php-coveralls:~1.0@stable
 
-# After success, run sh to bind coveralls
-after_success:
-- sh -c 'if( [ "$TRAVIS_PHP_VERSION" != "hhvm" ] ); then php vendor/bin/coveralls -v; fi;'
+script:
+- ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
+ 
+after_script:
+- php vendor/bin/coveralls -v
