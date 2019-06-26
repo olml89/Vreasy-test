@@ -4,16 +4,15 @@ language: php
 
 # Define the php versions against we want to test our code
 php:
-- 7.1
 - 7.2
 
 # Note: Code coverage requires php-xDebug extension enabled on CI server
 install:
-- travis_retry composer install --no-interaction --no-suggest
+- composer install --no-interaction --no-suggest
 
 # Testing the app (see phpunit.xml) for configs, generating Code Coverage report
 script:
-- composer test -- --coverage-clover=coverage.xml
+- vendor/bin/phpunit tests --coverage-clover coverage.xml
 
 
 # Submit coverage report to https://codecov.io
