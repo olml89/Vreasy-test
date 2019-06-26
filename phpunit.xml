@@ -6,11 +6,21 @@
 		stopOnFailure="false">
 
 	<testsuites>
-
 		<testsuite name="Test suite">
-			<directory>tests</directory>
+			<directory suffix=".php">./tests</directory>
 		</testsuite>
-		
 	</testsuites>
+
+	<filter>
+		<whitelist>
+	    		<directory suffix=".php">./assets</directory>
+			<directory suffix=".php">./config</directory>
+			<directory suffix=".php">./core</directory>
+			<directory suffix=".php">./db</directory>
+			<directory suffix=".php">./src</directory>
+			<directory suffix=".php">./vendor</directory>
+			<directory suffix=".php">./www</directory>
+		</whitelist>
+	</filter>
 
 </phpunit>
