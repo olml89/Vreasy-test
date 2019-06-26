@@ -1,15 +1,14 @@
 
-#http://kizu514.com/blog/setting-up-coveralls-io-with-travis-ci-and-phpunit/
+#https://stackoverflow.com/questions/39501417/how-can-i-connect-coveralls-and-travis-in-github
 
 language: php
-
-before_install:
-- composer install
-- composer require satooshi/php-coveralls:~1.0@stable # Require phpCoveralls
 
 install:
 - composer install --no-interaction
 
-script: "sbt clean coverage test"
+script: 
+- mkdir -p build/logs
+- vendor/bin/phpunit tests --coverage-clover build/logs/clover.xml
 
-after_success: "sbt coveralls"
+after_success:
+- travis_retry php vendor/bin/php-coveralls
