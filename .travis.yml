@@ -7,9 +7,6 @@ install:
 - composer install --no-interaction
 
 after_script:
-    - |
-      if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" ]]; then
-        vendor/bin/phpunit --coverage-clover coverage.xml
-        wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-        php php-coveralls.phar --verbose
-      fi
+- vendor/bin/phpunit --coverage-clover coverage.xml
+- wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+- php php-coveralls.phar --verbose
