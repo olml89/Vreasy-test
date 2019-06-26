@@ -9,18 +9,21 @@ use System\Libraries\Validation\RequestValidator;
 use System\Libraries\ErrorHandling\Exceptions\Http\HttpException400 as HttpBadRequest400; 	
 use System\Libraries\ErrorHandling\Exceptions\Http\HttpException422 as HttpUnprocessableEntity422;
 
+use Application\Entities\City\CityFactory;
+use Application\Entities\City\CityModel;
+
 
 class RequestValidationJsonInputsTest extends TestCase {
 
 
-	protected $headers 			= NULL;	// \Symfony\Component\HttpFoundation\HeaderBag
+	protected $validHeaders		= NULL;	// \Symfony\Component\HttpFoundation\HeaderBag
 	protected $requestValidator	= NULL; // \System\Libraries\Validation\RequestValidator
 
 
 	protected function setUp() : void {
 
-		//initialize a request
-		$this->headers = new SymfonyHeaderBag([
+		//valid headers
+		$this->validHeaders = new SymfonyHeaderBag([
 			'Accept-Charset' 	=> 'utf-8',
 			'Content-Type'		=> 'application/json; charset=utf-8',
 			'Content'			=> 'application/json'
@@ -35,7 +38,7 @@ class RequestValidationJsonInputsTest extends TestCase {
 
 
 	//strict JSON input: malformed body
-	public function testAssertInvalidStrictJsonInputReturns400() : void {
+	public function testInvalidStrictJsonInputReturns400() : void {
 
 		$this->expectException(\System\Libraries\ErrorHandling\Exceptions\Http\HttpException400::class);
 
@@ -57,14 +60,14 @@ class RequestValidationJsonInputsTest extends TestCase {
 			$json
 		);
 
-		$request->headers = $this->headers;
+		$request->headers = $this->validHeaders;
 		$this->requestValidator->assertStrictJsonInput($request, $expectedFields);
 
 	}
 
 
 	//strict JSON input: missing fields
-	public function testAssertMissingFieldsFromStrictJsonInputReturns422() : void {
+	public function testMissingFieldsFromStrictJsonInputReturns422() : void {
 
 		$this->expectException(HttpUnprocessableEntity422::class);
 
@@ -90,14 +93,14 @@ class RequestValidationJsonInputsTest extends TestCase {
 			$json
 		);
 
-		$request->headers = $this->headers;
+		$request->headers = $this->validHeaders;
 		$this->requestValidator->assertStrictJsonInput($request, $expectedFields);
 
 	}
 
 
 	//strict JSON input: unexpected extra fields
-	public function testAssertUnexpectedFieldsInStrictJsonInputReturns422() : void {
+	public function testUnexpectedFieldsInStrictJsonInputReturns422() : void {
 
 		$this->expectException(HttpUnprocessableEntity422::class);
 
@@ -124,14 +127,14 @@ class RequestValidationJsonInputsTest extends TestCase {
 			$json
 		);
 
-		$request->headers = $this->headers;
+		$request->headers = $this->validHeaders;
 		$this->requestValidator->assertStrictJsonInput($request, $expectedFields);
 
 	}
 
 
 	//strict JSON input: invalid fields
-	public function testAssertInvalidFieldsFromStrictJsonInputReturns422() : void {
+	public function testInvalidFieldsFromStrictJsonInputReturns422() : void {
 
 		$this->expectException(HttpUnprocessableEntity422::class);
 
@@ -157,14 +160,14 @@ class RequestValidationJsonInputsTest extends TestCase {
 			$json
 		);
 
-		$request->headers = $this->headers;
+		$request->headers = $this->validHeaders;
 		$this->requestValidator->assertStrictJsonInput($request, $expectedFields);
 
 	}
 
 
 	//strict JSON input: malformed body
-	public function testAssertInvalidFlexibleJsonInputReturns400() : void {
+	public function testInvalidFlexibleJsonInputReturns400() : void {
 
 		$this->expectException(HttpBadRequest400::class);
 
@@ -186,14 +189,14 @@ class RequestValidationJsonInputsTest extends TestCase {
 			$json
 		);
 
-		$request->headers = $this->headers;
+		$request->headers = $this->validHeaders;
 		$this->requestValidator->assertFlexibleJsonInput($request, $expectedFields);
 
 	}
 
 
 	//strict JSON input: unexpected fields
-	public function testAssertUnexpectedFieldsInFlexibleJsonInputReturns422() : void {
+	public function testUnexpectedFieldsInFlexibleJsonInputReturns422() : void {
 
 		$this->expectException(HttpUnprocessableEntity422::class);
 
@@ -220,8 +223,47 @@ class RequestValidationJsonInputsTest extends TestCase {
 			$json
 		);
 
-		$request->headers = $this->headers;
+		$request->headers = $this->validHeaders;
 		$this->requestValidator->assertFlexibleJsonInput($request, $expectedFields);
+
+	}
+
+
+	//test we create valid cities from a valid request
+	public function testAssertWeCreateValidCitiesFromAValidRequest() : void {
+
+		$expectedFields = [
+			'name'		=> 'string',
+			'latitude' 	=> 'float',
+			'longitude' => 'float'
+		];
+
+		$requestFields = [
+			'name' 		=> 'whatever',		
+			'latitude' 	=> -34.56,
+			'longitude' => -23.34	
+		];
+
+		$json = json_encode($requestFields);
+
+		$request = new SymfonyRequest(
+			[], //$_GET
+			[], //$_POST
+			[],	//request attributes parsed from PATH_INFO
+			[], //$_COOKIE
+			[], //$_FILES
+			[], //$_SERVER
+			$json
+		);
+
+		$request->headers = $this->validHeaders;
+		$post = $this->requestValidator->assertStrictJsonInput($request, $expectedFields);
+		$city = (new CityFactory())->createFromInput($post);
+
+		$this->assertInstanceOf(CityModel::class, $city);
+		$this->assertEquals($requestFields['name'], $city->getName());
+		$this->assertEquals($requestFields['latitude'], $city->getLatitude());
+		$this->assertEquals($requestFields['longitude'], $city->getLongitude());
 
 	}
 

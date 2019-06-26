@@ -31,7 +31,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//incorrect Accept-Charset
-	public function testAssertInvalidAcceptCharsetReturns406() : void {
+	public function testInvalidAcceptCharsetReturns406() : void {
 
 		$this->expectException(HttpNotAcceptable406::class);
 
@@ -48,7 +48,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//POST request: requires a body, but Content-Type is not set
-	public function testAssertVoidContentTypeOnPostRequestsReturns415() : void {
+	public function testVoidContentTypeOnPostRequestsReturns415() : void {
 
 		$this->expectException(HttpUnsupportedMediaType415::class);
 
@@ -64,7 +64,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//POST request: requires a body, Content-Type is set, but invalid
-	public function testAssertInvalidContentTypeOnPostRequestsReturns415() : void {
+	public function testInvalidContentTypeOnPostRequestsReturns415() : void {
 
 		$this->expectException(HttpUnsupportedMediaType415::class);
 
@@ -81,7 +81,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//POST request: requires a body, Content-Type is set and valid, charset is required (strict mode), but not specified
-	public function testAssertValidContentTypeWithVoidCharsetOnPostRequestsReturns415() : void {
+	public function testValidContentTypeWithVoidCharsetOnPostRequestsReturns415() : void {
 
 		$this->expectException(HttpUnsupportedMediaType415::class);
 
@@ -98,12 +98,12 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//POST request: requires a body, Content-Type is set and valid, charset is required (strict mode) and set, but invalid
-	public function testAssertValidContentTypeWithInvalidCharsetOnPostRequestsReturns415() : void {
+	public function testValidContentTypeWithInvalidCharsetOnPostRequestsReturns415() : void {
 
 		$this->expectException(HttpUnsupportedMediaType415::class);
 
 		$headers = [
-			'Content-Type' => 'application/json; charset=INVALID'	//invalid (misses charset)
+			'Content-Type' => 'application/json; charset=INVALID'	//invalid 
 		];
 
 		$this->request->headers = new SymfonyHeaderBag($headers);
@@ -115,7 +115,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//invalid Accept-Charset
-	public function testAssertInvalidAcceptReturns406() : void {
+	public function testInvalidAcceptReturns406() : void {
 
 		$this->expectException(HttpNotAcceptable406::class);
 
@@ -130,7 +130,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//valid Accept, but Accept-Charset not set, and implicit charset not set either
-	public function testAssertVoidAcceptCharsetAndValidAcceptWithVoidImplicitCharsetReturns406() : void {
+	public function testVoidAcceptCharsetAndValidAcceptWithVoidImplicitCharsetReturns406() : void {
 
 		$this->expectException(HttpNotAcceptable406::class);
 
@@ -145,7 +145,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//valid Accept, but Accept-Charset not set, and implicit charset is invalid
-	public function testAssertVoidAcceptCharsetAndValidAcceptWithInvalidImplicitCharsetReturns406() : void {
+	public function testVoidAcceptCharsetAndValidAcceptWithInvalidImplicitCharsetReturns406() : void {
 
 		$this->expectException(HttpNotAcceptable406::class);
 
@@ -160,7 +160,7 @@ class RequestValidationHeadersTest extends TestCase {
 
 
 	//valid Accept and implicit charset is invalid, but we set before a valid Accept-Charset
-	public function testAssertValidAcceptCharsetAndValidAcceptWithInvalidImplicitCharsetIsASuccess() : void {
+	public function testAssertValidAcceptCharsetAndValidAcceptWithInvalidImplicitCharsetAreASuccess() : void {
 
 		$headers = [
 			'Accept-Charset'	=> 'utf-8',
@@ -168,6 +168,39 @@ class RequestValidationHeadersTest extends TestCase {
 		];
 
 		$this->request->headers = new SymfonyHeaderBag($headers);
+		$this->requestValidator->validateHeaders($this->request);
+		$this->assertTrue(TRUE);
+
+	}
+
+
+	//valid headers pass successfully on a GET request (this is in facte the same as the previous test)
+	public function testAssertValidHeadersOnGetRequestAreASuccess() : void {
+
+		$headers = [
+			'Accept-Charset'	=> 'utf-8',
+			'Accept' 			=> 'application/json; charset=INVALID'
+		];
+
+		$this->request->headers = new SymfonyHeaderBag($headers);
+		$this->requestValidator->validateHeaders($this->request);
+		$this->assertTrue(TRUE);
+
+	}
+
+
+	//valid headers pass successfully on a POST request
+	public function testAssertValidHeadersOnAPostRequestAreASuccess() : void {
+
+		$headers = [
+			'Accept-Charset'	=> 'utf-8',
+			'Accept' 			=> 'application/json',
+			'Content-Type'		=> 'application/json; charset=utf-8'
+		];
+
+		$this->request->headers = new SymfonyHeaderBag($headers);
+		$this->request->setMethod(SymfonyRequest::METHOD_POST);
+
 		$this->requestValidator->validateHeaders($this->request);
 		$this->assertTrue(TRUE);
 
