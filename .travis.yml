@@ -1,4 +1,4 @@
-# Config file for https://travis-ci.org/
+# https://github.com/ankurk91/phpunit-travis-ci-coverage-example/blob/master/.travis.yml
 
 language: php
 

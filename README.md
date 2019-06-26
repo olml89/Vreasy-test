@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/olml89/Vreasy-test.svg?branch=master)](https://travis-ci.org/olml89/Vreasy-test) [![Coverage Status](https://coveralls.io/repos/github/olml89/Vreasy-test/badge.svg?branch=master)](https://coveralls.io/github/olml89/Vreasy-test?branch=master)
+[![Build Status](https://travis-ci.org/olml89/Vreasy-test.svg?branch=master)](https://travis-ci.org/olml89/Vreasy-test) [![Coverage Status](https://codecov.io/gh/olml89/Vreasy-test/branch/master/graph/badge.svg)](https://codecov.io/gh/olml89/Vreasy-test)
 
 # Vreasy-test
 Implementation of a test for Vreasy using a light custom PHP Framework.
