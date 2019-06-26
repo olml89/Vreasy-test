@@ -28,7 +28,7 @@ The environment string is optional and can take up to three values: 'development
 *DB_HOST*, *DB_USER* and *DB_PASSWORD* are the credentials to authenticate with your mysql server. The *DB_NAME* and the *DB_CHARSET* can be whichever you want, but if you want the application to bootstrap the database for you instead of having to do it manually you must provide the values by default shown here.
 
 ## Logging configuration
-A logging.php configuration file can be found in the **/config** application directory with default values to set up the logging environment, but you can specify any log file you want. Just be sure that the directory exists and that you grant the writing permissions for it, on UNIX systems:
+A logging.php configuration file can be found in the **/config** application directory with default values to set up the logging environment. By default, the logging file is **/data/log.txt**. If you are in a UNIX system, be sure that the logging directory exists and grant the writing permissions for it:
 ```console
 chmod -R +777 data 
 ```
