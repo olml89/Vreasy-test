@@ -6,9 +6,10 @@ language: php
 install:
 - composer install --no-interaction
 
-script: 
-- mkdir -p build/logs
-- vendor/bin/phpunit tests --coverage-clover build/logs/clover.xml
-
-after_success:
-- travis_retry php vendor/bin/php-coveralls
+after_script:
+    - |
+      if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" ]]; then
+        vendor/bin/phpunit --coverage-clover coverage.xml
+        wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+        php php-coveralls.phar --verbose
+      fi
