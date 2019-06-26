@@ -17,7 +17,7 @@
 			<directory suffix=".php">./config</directory>
 			<directory suffix=".php">./vendor</directory>
 			<directory suffix=".php">./www</directory>
-		</whitelist>
+		</blacklist>
 	</filter>
 
 </phpunit>
