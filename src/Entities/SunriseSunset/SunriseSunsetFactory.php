@@ -24,7 +24,7 @@ final class SunriseSunsetFactory {
 			return new SunriseSunsetInvalidDateModel($date);
 		}
 
-		//results retrieved by the API are always in UTC. so we set PHP time functions to PHP, we store the timestamp and set the timezone
+		//results retrieved by the API are always in UTC. so we set PHP time functions to UTC, we store the timestamp and set the timezone
 		//to the timezone required. Thus when converting timestamps using date(), PHP will apply the difference
 		date_default_timezone_set('UTC');
 		$sunrise = strtotime($sunriseSunsetInfo['results']['sunrise']);

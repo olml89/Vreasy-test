@@ -220,6 +220,9 @@
 							<a href="https://travis-ci.com">Travis CI</a>
 						</li>
 						<li>
+							<a href="https://codecov.io">Codecov</a>
+						</li>						
+						<li>
 							<a href="https://www.sourcetreeapp.com">Sourcetree</a> 2.4.7.0
 							(Git 2.14.1)
 						</li>

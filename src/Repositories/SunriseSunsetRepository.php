@@ -28,8 +28,6 @@ final class SunriseSunsetRepository {
 
 		$sunriseSunsetInfo = $this->sunriseSunsetApiConsumer->getInfoByCity($city, $dateTimeZone->getDate());
 
-		var_dump($sunriseSunsetInfo); die();
-
 		return $this->sunriseSunsetFactory->createFromInfo(
 			$sunriseSunsetInfo, 
 			$dateTimeZone->getDate(), 
