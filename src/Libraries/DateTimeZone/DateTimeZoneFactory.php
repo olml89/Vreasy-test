@@ -10,4 +10,9 @@ final class DateTimeZoneFactory {
 	}
 
 
+	public function createFromDefaults() : DateTimeZoneModel {
+		return new DateTimeZoneModel([]);
+	}
+
+
 }

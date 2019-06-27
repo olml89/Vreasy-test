@@ -25,7 +25,18 @@ final class DateTimeZoneModel {
 
 
 	private function isValidDate(string $date) : bool {
-		return \DateTime::createFromFormat('Y-m-d', $date) !== FALSE;
+
+		//https://stackoverflow.com/questions/14504913/verify-valid-date-using-phps-datetime-class
+		//It seems DateTime::createFromFormat only raises errors if the specified year is invalid (like 20234). For invalid days/months it only
+		//gives a warning, because it tries to correct invalid values like: 2014/12/32 => 2015/01/01. So we have to take that into account
+		$dateTime = \DateTime::createFromFormat('Y-m-d', $date);
+
+		if($dateTime === FALSE) {
+			return FALSE;
+		}
+
+		return empty(\DateTime::getLastErrors()['warning_count']);
+
 	}
 
 

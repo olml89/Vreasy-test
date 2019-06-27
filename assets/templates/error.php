@@ -17,6 +17,7 @@ return [
     ],
 
     'pages/vw_error' => [
+        'base_url',
         'exception'
     ],
 
